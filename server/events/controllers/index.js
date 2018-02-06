@@ -1,5 +1,7 @@
-const testAction = require('./test');
+const startRecord = require('./start-record');
+const stopRecord = require('./stop-record');
 
 module.exports = {
-  testAction,
+  startRecord,
+  stopRecord,
 };
