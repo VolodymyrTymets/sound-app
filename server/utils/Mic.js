@@ -13,6 +13,7 @@ class Mic {
     this._micInstance = mic(_.extend(config.mic, {
       // todo extend for raspi
       device: 'plughw:0',
+      debug: false,
     }));
     this._micInputStream = this._micInstance.getAudioStream();
     this._micInputStream.on('error', function(err) {

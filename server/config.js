@@ -6,5 +6,6 @@ module.exports = {
     exitOnSilence: 6,
     device: 'plughw:1',
     fileType: 'wav',
-  }
+  },
+  LIMIT_OF_SILENCE: 1,
 };
