@@ -1,0 +1,10 @@
+module.exports = {
+  mic: {
+    rate: 44100,
+    channels: 2,
+    debug: true,
+    exitOnSilence: 6,
+    device: 'plughw:1',
+    fileType: 'wav',
+  }
+};
