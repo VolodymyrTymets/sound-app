@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose, lifecycle, withHandlers, withState } from 'recompose';
+import { compose, lifecycle } from 'recompose';
 import Component from './Component';
 
 

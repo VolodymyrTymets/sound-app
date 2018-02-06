@@ -18,8 +18,9 @@ const ToolBar = ({ onClick, status }) =>
   <div className="row">
     <div className="col-md-12">
       <RaisedButton
+        fullWidth
         label={labels[status]}
-        className="align-content"
+        className="align-content m-t-15"
         onClick={onClick}
         icon={<FontIcon className="material-icons">{icons[status]}</FontIcon>}
       />
