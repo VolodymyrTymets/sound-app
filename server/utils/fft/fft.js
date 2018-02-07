@@ -6,7 +6,7 @@ function nearestPow2( aSize ){
   return Math.pow( 2, Math.round( Math.log( aSize ) / Math.log( 2 ) ) );
 }
 
-const spliceSpectrum = (count, spectrum) => {
+const spliceSpectrum = (spectrum, count = 20) => {
   const max = _.maxBy(spectrum, v => v.amplitude);
   const maxIndex = _.findIndex(spectrum, v => v.amplitude === max.amplitude);
   const min = (maxIndex - count) > 0 ? (maxIndex - count) : 0;

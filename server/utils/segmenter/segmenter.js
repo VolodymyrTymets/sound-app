@@ -59,7 +59,7 @@ class Segmentor extends EventEmitter {
    const average = _.mean(sums);
 
    if (average < LIMIT_OF_SILENCE) {
-     if (this._waves >= minWavesCount) {
+     if (this._waves.length >= minWavesCount) {
        const segment = _.flatten(this._waves);
        //this._saveSegment(this._buffers, segment);
        this.emit('segment', segment);
