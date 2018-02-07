@@ -4,21 +4,26 @@
   "description": "socet-sound-app",
   "main": "index.js",
   "dependencies": {},
-  "devDependencies": {},
-  "scripts": {
-    "dev": "./node_modules/.bin/gulp run:dev",
-    "start": "NODE_ENV=production NODE_PATH=server node ./server/bin/www",
-    "lint": "eslint ./server ./client"
-  },
   "devDependencies": {
+    "@ljharb/eslint-config": "^12.2.1",
     "babel-eslint": "^7.2.3",
-    "eslint": "^3.19.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.3",
+    "eslint": "^4.17.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-postcss": "^2.0.2",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.6.1",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-exec": "^2.1.3",
     "gulp-nodemon": "^2.2.1",
     "npm-run": "^4.1.2"
+  },
+  "scripts": {
+    "dev": "./node_modules/.bin/gulp run:dev",
+    "start": "NODE_ENV=production NODE_PATH=server node ./server/bin/www",
+    "lint": "eslint ./server ./client"
   },
   "author": "",
   "license": "ISC"

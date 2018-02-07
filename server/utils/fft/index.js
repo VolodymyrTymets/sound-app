@@ -1,3 +1,3 @@
-const fft = require('./fft');
+const { fft, spliceSpectrum } = require('./fft');
 
-module.exports = { fft };
+module.exports = { fft, spliceSpectrum };

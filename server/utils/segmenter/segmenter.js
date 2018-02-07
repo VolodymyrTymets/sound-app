@@ -48,7 +48,7 @@ class Segmentor extends EventEmitter {
  *  filter noiz from wave, by equall sum of 100 ponts with standart (SUM_OF_100)
  *  @param {Array} 
  **/
- findSegment(wave, buffer) {
+ findSegment(wave, minWavesCount, buffer) {
    const sums = [];
    for (let index = 0; index < wave.length; index = index + N) {
      const slice = wave.slice(index, index + N);
@@ -59,9 +59,8 @@ class Segmentor extends EventEmitter {
    const average = _.mean(sums);
 
    if (average < LIMIT_OF_SILENCE) {
-     const segment = _.flatten(this._waves);
-     // todo  test value
-     if (segment.length > 50000) {
+     if (this._waves >= minWavesCount) {
+       const segment = _.flatten(this._waves);
        //this._saveSegment(this._buffers, segment);
        this.emit('segment', segment);
      }

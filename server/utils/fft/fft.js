@@ -6,6 +6,13 @@ function nearestPow2( aSize ){
   return Math.pow( 2, Math.round( Math.log( aSize ) / Math.log( 2 ) ) );
 }
 
+const spliceSpectrum = (count, spectrum) => {
+  const max = _.maxBy(spectrum, v => v.amplitude);
+  const maxIndex = _.findIndex(spectrum, v => v.amplitude === max.amplitude);
+  const min = (maxIndex - count) > 0 ? (maxIndex - count) : 0;
+  return spectrum.splice(min, count * 2);
+};
+
 
 const fft = (wave) => {
   let waveLength = wave.length;
@@ -21,4 +28,4 @@ const fft = (wave) => {
   return { wave: _.values(cutedWave), spectrum };
 };
 
-module.exports = fft;
+module.exports = { fft, spliceSpectrum };

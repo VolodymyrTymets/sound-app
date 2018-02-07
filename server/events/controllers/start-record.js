@@ -2,25 +2,34 @@ const _ = require('lodash');
 const { mic_data, find_segment } = require('../event-names');
 const mic = require('../../utils/Mic');
 const { Segmenter } = require('../../utils/segmenter');
-const { fft } = require('../../utils/fft');
+const { fft, spliceSpectrum } = require('../../utils/fft');
 const segmenter = new Segmenter();
 
+const WAVE_SKIP_STEP = 4;
+
+const sendSegmentRes = ({ segment, spectrum }, client) => {
+  const segmentToClient = [];
+  segment.forEach(wave => {
+    for(let index = 0; index < wave.length; index= index + WAVE_SKIP_STEP) {
+      segmentToClient.push(wave[index]);
+    }
+  });
+  client.emit(find_segment, {
+    segment: segmentToClient, spectrum: spliceSpectrum(spectrum)});
+};
 
 const sendRecordRes = (waves, client) => {
   const waveToClient = [];
   waves.forEach(wave => {
-    for(let index = 0; index < wave.length; index= index + 4) {
+    for(let index = 0; index < wave.length; index= index + WAVE_SKIP_STEP) {
       waveToClient.push(wave[index]);
     }
   });
   client.emit(mic_data, waveToClient)
 };
 
-
-
 segmenter.on('noSegment', () => {
 });
-
 
 const startRecord = client => data => {
   console.log('start-record', data)
@@ -33,13 +42,13 @@ const startRecord = client => data => {
       sendRecordRes(waves, client);
       waves = [];
     }
-    segmenter.findSegment(wave, buffer);
+    segmenter.findSegment(wave, 11, buffer); //min should be 11 waves = 1 second
   });
 
   segmenter.on('segment', segment => {
     console.log('segment.length ->', segment.length);
     const { spectrum } = fft(segment);
-    client.emit(find_segment, { segment, spectrum });
+    sendSegmentRes({ segment, spectrum }, client);
   });
 };
 
