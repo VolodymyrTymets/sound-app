@@ -22,6 +22,7 @@
   },
   "scripts": {
     "dev": "./node_modules/.bin/gulp run:dev",
+    "client-dev": "./node_modules/.bin/gulp client",
     "start": "NODE_ENV=production NODE_PATH=server node ./server/bin/www",
     "lint": "eslint ./server ./client"
   },
