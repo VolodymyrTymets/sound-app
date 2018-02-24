@@ -2,7 +2,7 @@ const _ = require('lodash');
 const { EventEmitter } = require('events');
 const path = require('path');
 const fs = require('fs');
-const { LIMIT_OF_SILENCE } = require('../../config');
+
 
 const N = 100;
 
@@ -58,11 +58,12 @@ class Segmentor extends EventEmitter {
 
    const average = _.mean(sums);
 
-   if (average < LIMIT_OF_SILENCE) {
+   if (average < global.config.LIMIT_OF_SILENCE) {
      if (this._waves.length >= minWavesCount) {
        const segment = _.flatten(this._waves);
        //this._saveSegment(this._buffers, segment);
-       this.emit('segment', segment);
+       console.log('Segmenter LIMIT_OF_SILENCE _>', global.config.LIMIT_OF_SILENCE)
+       this.emit('segment', segment, average);
      }
      this._waves = [];
      this._buffers = [];

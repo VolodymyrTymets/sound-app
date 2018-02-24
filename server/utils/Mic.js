@@ -2,7 +2,9 @@ const _ = require('lodash');
 const mic = require('mic');
 const WavDecoder = require('wav-decoder');
 const header = require("waveheader");
-const config = require('../config');
+const fs = require('fs');
+const path = require('path');
+const config = global.config;
 
 class Mic {
   _catch(error) {
@@ -10,6 +12,8 @@ class Mic {
     console.log(error);
   }
   _createInstance () {
+    delete  this._micInputStream;
+    delete  this._micInstance;
     this._micInstance = mic(_.extend(config.mic, {
       debug: false,
     }));
@@ -20,12 +24,25 @@ class Mic {
   }
   start(onData) {
     try {
+      console.log('config.mic.device ->', config.mic.device)
       this._createInstance();
       this._micInputStream.on('data', buffer => {
         WavDecoder.decode(Buffer.concat([header(config.mic.rate), buffer]))
           .then(audioData => onData(audioData, buffer))
           .catch(this._catch);
       });
+
+      if(global.config.FILE_NAME) {
+
+        const dir = path.resolve(__dirname, '../assets/', global.config.FILE_NAME);
+        console.log('dir ->', dir)
+         if (!fs.existsSync(dir)){
+          fs.mkdirSync(dir);
+        }
+        const outputFileStream = fs.WriteStream(path.resolve(dir,'output.wav'));
+
+        this._micInputStream.pipe(outputFileStream);
+      }
 
       this._micInstance.start();
     } catch (error) {

@@ -12,10 +12,8 @@ const enhance = compose(
   }), { addSegment }),
   lifecycle({
     componentWillMount() {
-      socket.on(list.find_segment, ({ segment, spectrum }) => {
-        console.log('segment ->', segment)
-        console.log('spectrum ->', spectrum)
-        this.props.addSegment(segment, spectrum)
+      socket.on(list.find_segment, ({ segment, spectrum, average }) => {
+        this.props.addSegment(segment, spectrum, average)
       })
     },
   })

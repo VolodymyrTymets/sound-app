@@ -13,9 +13,10 @@ const actions = {
 const enhance = compose(
   connect(state => ({
     status: state.micStatus.status,
+    settings: state.settings,
   }), { stopRecord, startRecord }),
   withHandlers({
-    onClick: props => () => props[actions[props.status]](),
+    onClick: props => () => props[actions[props.status]](props.settings),
   }),
 );
 
