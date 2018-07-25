@@ -3,9 +3,7 @@ const { EventEmitter } = require('events');
 const path = require('path');
 const fs = require('fs');
 
-
 const N = 100;
-
 
 /**
  * Provide filter wave
@@ -20,6 +18,17 @@ class Segmentor extends EventEmitter {
   constructor() {
     super();
     this._waves = [];
+    this._everages = [];
+    this._limitOfSilence = 0;
+    this._timetoLearn = 4000; // 4s
+
+    // take every 4s limit of sielence
+    setInterval(() => {
+      console.log(`${this._everages.length} ${_.max(this._everages)} ${_.mean(this._everages)}`)
+      this._limitOfSilence = _.mean(this._everages);
+      this._everages = [];
+    }, this._timetoLearn);
+
     this._buffers = new ArrayBuffer([]);
   }
 
@@ -57,18 +66,18 @@ class Segmentor extends EventEmitter {
    }
 
    const average = _.mean(sums);
+   this._everages.push(average);
 
-   if (average < global.config.LIMIT_OF_SILENCE) {
+   if (average < this._limitOfSilence) {
      if (this._waves.length >= minWavesCount) {
        const segment = _.flatten(this._waves);
-       //this._saveSegment(this._buffers, segment);
        console.log('Segmenter LIMIT_OF_SILENCE _>', global.config.LIMIT_OF_SILENCE)
        this.emit('segment', segment, average);
      }
+
      this._waves = [];
      this._buffers = [];
      this.emit('noSegment');
-
    } else {
      this._waves.push(_.values(wave));
      this._buffers = this._buffers.length ? Buffer.concat([this._buffers, buffer]) : buffer;
