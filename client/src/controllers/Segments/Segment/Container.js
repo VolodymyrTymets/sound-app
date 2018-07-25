@@ -1,5 +1,3 @@
-
-import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import Component from './Component';
 
@@ -7,8 +5,6 @@ const sgmentToPoints =  segment => segment.map((value, index) => ({ y: value || 
 const spectrumToPoints = spectrum => spectrum.map(({ amplitude, frequency }) => ({ y: amplitude || 0, x: frequency }));
 
 const enhance = compose(
-  connect(state => {
-  }),
   lifecycle({
     componentDidMount() {
       const { segment, index } = this.props;

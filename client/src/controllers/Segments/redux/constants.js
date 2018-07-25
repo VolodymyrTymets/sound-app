@@ -1,1 +1,2 @@
 export const ADD_SEGMENT = 'ADD_SEGMENT';
+export const SET_TISSUE_TYPE = 'SET_TISSUE_TYPE';

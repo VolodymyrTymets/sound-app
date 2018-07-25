@@ -3,19 +3,21 @@ const { mic_data, find_segment } = require('../event-names');
 const mic = require('../../utils/Mic');
 const { Segmenter } = require('../../utils/segmenter');
 const { fft, spliceSpectrum } = require('../../utils/fft');
-
+const { getSpectrumEnergy } = require('../../utils/spectrum-energy');
 
 const WAVE_SKIP_STEP = 4;
 
-const sendSegmentRes = ({ segment, spectrum, average }, client) => {
+const sendSegmentRes = ({ segment, spectrum, average, energy, tissueType }, client) => {
   const segmentToClient = [];
   for(let index = 0; index < segment.length; index= index + WAVE_SKIP_STEP) {
     segmentToClient.push(segment[index]);
   }
   client.emit(find_segment, {
     average,
+    energy,
+    tissueType,
     segment: segmentToClient,
-    spectrum: spliceSpectrum(spectrum, 40)
+    spectrum: spliceSpectrum(spectrum, 40),
   });
 };
 
@@ -52,9 +54,18 @@ const startRecord = client => data => {
   });
 
   segmenter.on('segment', (segment, average) => {
-    console.log('startRecord.js segment.length ->', segment.length);
+
     const { spectrum } = fft(segment);
-    sendSegmentRes({ segment, spectrum, average }, client);
+    const energy = getSpectrumEnergy(spectrum, 10);
+    console.log(`startRecord.js segment.length [${segment.length}] energy [${energy}]`, );
+    let tissueType = '';
+    if(energy > 0.38) {
+      tissueType = 'nerve';
+    }
+    if(energy > 0.36 && energy < 0.38) {
+      tissueType = 'muscle';
+    }
+    sendSegmentRes({ segment, spectrum, average, energy, tissueType }, client);
   });
 };
 
