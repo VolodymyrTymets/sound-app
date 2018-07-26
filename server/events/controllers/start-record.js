@@ -9,7 +9,7 @@ const WAVE_SKIP_STEP = 4;
 
 const sendSegmentRes = ({ segment, spectrum, average, energy, tissueType }, client) => {
   const segmentToClient = [];
-  for(let index = 0; index < segment.length; index= index + WAVE_SKIP_STEP) {
+  for(let index = 0; index < segment.length; index = index + WAVE_SKIP_STEP) {
     segmentToClient.push(segment[index]);
   }
   client.emit(find_segment, {
@@ -38,8 +38,6 @@ const startRecord = client => data => {
   global.config.LIMIT_OF_SILENCE = parseFloat(data.settings.segmentationValue) || global.config.LIMIT_OF_SILENCE;
   global.config.FILE_NAME = data.settings.fileName;
 
-  console.log(global.config)
-
   let waves = [];
   const segmenter = new Segmenter();
 
@@ -57,7 +55,7 @@ const startRecord = client => data => {
 
     const { spectrum } = fft(segment);
     const energy = getSpectrumEnergy(spectrum, 10);
-    console.log(`startRecord.js segment.length [${segment.length}] energy [${energy}]`, );
+    console.log(`find segment -> [${segment.length}] energy [${energy}]`, );
     let tissueType = '';
     if(energy > 0.38) {
       tissueType = 'nerve';

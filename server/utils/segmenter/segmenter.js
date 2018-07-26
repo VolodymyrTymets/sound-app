@@ -24,7 +24,6 @@ class Segmentor extends EventEmitter {
 
     // take every 4s limit of sielence
     setInterval(() => {
-      console.log(`${this._everages.length} ${_.max(this._everages)} ${_.mean(this._everages)}`)
       this._limitOfSilence = _.mean(this._everages);
       this._everages = [];
     }, this._timetoLearn);
@@ -71,7 +70,6 @@ class Segmentor extends EventEmitter {
    if (average < this._limitOfSilence) {
      if (this._waves.length >= minWavesCount) {
        const segment = _.flatten(this._waves);
-       console.log('Segmenter LIMIT_OF_SILENCE _>', global.config.LIMIT_OF_SILENCE)
        this.emit('segment', segment, average);
      }
 
@@ -83,7 +81,6 @@ class Segmentor extends EventEmitter {
      this._buffers = this._buffers.length ? Buffer.concat([this._buffers, buffer]) : buffer;
    }
  }
-
 }
 
 module.exports = Segmentor;
