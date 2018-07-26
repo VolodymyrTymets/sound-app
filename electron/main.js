@@ -15,17 +15,13 @@ function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 1080, height: 680});
 
-  // path.join('file://', __dirname, './client/build/index.html'));
-
   // and load the index.html of the app.
   mainWindow.loadURL('http://localhost:3000');
-  mainWindow.loadURL('http://localhost:3000');
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
-  mainWindow.onbeforeunload = (e) => {
-    console.log('I do not want to be closed', e)
-  };
+  if (process.env.NODE_ENV !== 'production') {
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools();
+  }
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
