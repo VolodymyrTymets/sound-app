@@ -2,7 +2,8 @@ import {compose, lifecycle} from 'recompose';
 import {connect} from 'react-redux';
 import list from '../../../utils/event-names';
 
-import socket from '../../../utils/socket'
+import socket from '../../../utils/socket';
+import CanvasJS from '../../../utils/canvasjs.min';
 
 import Component from './Component';
 
@@ -14,8 +15,7 @@ const enhance = compose(
   connect(state => ({})),
   lifecycle({
     componentDidMount() {
-
-      const chart = new window.CanvasJS.Chart("record-chat", {
+      const chart = new CanvasJS.Chart("record-chat", {
         title: {
           text: 'Recorded'
         },

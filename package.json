@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "socet-sound-app",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "electron-prebuilt": "^1.4.13"
+  },
   "devDependencies": {
     "@ljharb/eslint-config": "^12.2.1",
     "babel-eslint": "^7.2.3",
@@ -25,6 +27,7 @@
     "dev": "./node_modules/.bin/gulp run:dev",
     "dev-raspi": "MIC=1 ./node_modules/.bin/gulp run:dev",
     "client-dev": "./node_modules/.bin/gulp client",
+    "electron-dev": "ELECTRON_START_URL=http://localhost:3000/ electron ./electron/main.js ",
     "start": "NODE_ENV=production NODE_PATH=server node ./server/bin/www",
     "lint": "eslint ./server ./client"
   },
