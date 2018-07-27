@@ -8,9 +8,9 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, 'assets')));
 
-app.use(express.static(path.resolve(__dirname, './public')));
+app.use(express.static(path.resolve(__dirname, './public/build/')));
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './public', 'index.html'));
+  res.sendFile(path.resolve(__dirname, './public/build/', 'index.html'));
 });
 
 module.exports = app;
