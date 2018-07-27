@@ -2,35 +2,16 @@ const _ = require('lodash');
 const { mic_data, find_segment } = require('../event-names');
 const mic = require('../../utils/Mic');
 const { Segmenter } = require('../../utils/segmenter');
-const { fft, spliceSpectrum } = require('../../utils/fft');
-const { getSpectrumEnergy } = require('../../utils/spectrum-energy');
 
-const WAVE_SKIP_STEP = 4;
+const { fftThreadWorker } = require('../../utils/FFT');
 
-const sendSegmentRes = ({ segment, spectrum, average, energy, tissueType }, client) => {
-  const segmentToClient = [];
-  for(let index = 0; index < segment.length; index = index + WAVE_SKIP_STEP) {
-    segmentToClient.push(segment[index]);
+const skipArrayElements = (array, step = 4) => {
+  const res = [];
+  for (let index = 0; index < array.length; index = index + step) {
+    res.push(array[index]);
   }
-  client.emit(find_segment, {
-    average,
-    energy,
-    tissueType,
-    segment: segmentToClient,
-    spectrum: spliceSpectrum(spectrum, 40),
-  });
+  return res;
 };
-
-const sendRecordRes = (waves, client) => {
-  const waveToClient = [];
-  waves.forEach(wave => {
-    for(let index = 0; index < wave.length; index= index + WAVE_SKIP_STEP) {
-      waveToClient.push(wave[index]);
-    }
-  });
-  client.emit(mic_data, waveToClient)
-};
-
 
 const startRecord = client => data => {
 
@@ -45,25 +26,28 @@ const startRecord = client => data => {
     const wave = audioData.channelData[0];
     waves.push(wave);
     if (waves.length === 11) {
-      sendRecordRes(waves, client);
+      const waveToClient = _.flatten(waves.map(w => skipArrayElements(w)));
+      client.emit(mic_data, waveToClient);
       waves = [];
     }
     segmenter.findSegment(wave, 11, buffer); //min should be 11 waves = 1 second
   });
 
   segmenter.on('segment', (segment, average) => {
+    const segmentToClient = skipArrayElements(segment);
 
-    const { spectrum } = fft(segment);
-    const energy = getSpectrumEnergy(spectrum, 10);
-    console.log(`find segment -> [${segment.length}] energy [${energy}]`, );
-    let tissueType = '';
-    if(energy > 0.38) {
-      tissueType = 'nerve';
-    }
-    if(energy > 0.36 && energy < 0.38) {
-      tissueType = 'muscle';
-    }
-    sendSegmentRes({ segment, spectrum, average, energy, tissueType }, client);
+    fftThreadWorker.start(segment, (response) => {
+      const { spectrum, energy } = response;
+      const tissueType = 'nerve';
+
+      client.emit(find_segment, {
+        average,
+        energy,
+        tissueType,
+        spectrum,
+        segment: segmentToClient,
+      });
+    });
   });
 };
 
