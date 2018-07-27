@@ -1,11 +1,8 @@
 import React from 'react';
-import './style.css'
+import './style.css';
 
 const RecordChart = ({  }) =>
   <div id="record-chat" className="mic-chat-container">
-
-  </div>
-
-
+  </div>;
 
 export default RecordChart;

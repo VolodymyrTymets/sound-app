@@ -1,8 +1,9 @@
 import SoundChart from './SoundChart';
-import Segments from './Segments';
+import Segment from './Segment';
 import SettingForm from './SettingForm';
+
 export {
   SoundChart,
-  Segments,
-  SettingForm
-}
+  Segment,
+  SettingForm,
+};

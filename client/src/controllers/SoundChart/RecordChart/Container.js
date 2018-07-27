@@ -1,5 +1,4 @@
 import {compose, lifecycle} from 'recompose';
-import {connect} from 'react-redux';
 import list from '../../../utils/event-names';
 
 import socket from '../../../utils/socket';
@@ -12,17 +11,16 @@ const dps = [];
 const seconds = 5;
 
 const enhance = compose(
-  connect(state => ({})),
   lifecycle({
     componentDidMount() {
       const chart = new CanvasJS.Chart("record-chat", {
         title: {
-          text: 'Recorded'
+          // text: 'Recorded',
         },
         axisY: {
           includeZero: false,
-          minimum: -1,
-          maximum: 1
+          minimum: -1.5,
+          maximum: 1.5,
         },
         data: [{
           type: "line",

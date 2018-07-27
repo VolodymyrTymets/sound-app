@@ -2,16 +2,16 @@ import React from 'react';
 import { connect } from "react-redux";
 import { compose, withProps } from "recompose";
 
-import { SoundChart, Segments, SettingForm } from '../controllers';
-import 'bootstrap/dist/css/bootstrap.css';
+import { SoundChart, Segment } from '../controllers';
+import "bootstrap/dist/css/bootstrap.css";
 
-
-
-const MainPage = ({ getClassBytissueType, tissueType }) =>
-  <div className="container" style={{ backgroundColor: getClassBytissueType(tissueType)}}>
-    <SettingForm />
-    <SoundChart />
-    <Segments />
+const MainPage = ({ getClassByTissueType, tissueType }) =>
+  <div className="container-fluid" style={{ backgroundColor: getClassByTissueType(tissueType)}}>
+    <div>
+      <h4 className="text-center">Tissue: {tissueType}</h4>
+      <SoundChart />
+      <Segment />
+    </div>
   </div>;
 
 const enhance = compose(
@@ -19,7 +19,7 @@ const enhance = compose(
     tissueType: state.tissueType,
   })),
   withProps(({
-    getClassBytissueType: (tissueType) => {
+    getClassByTissueType: (tissueType) => {
       if(tissueType == 'nerve') {
         return 'blue';
       }

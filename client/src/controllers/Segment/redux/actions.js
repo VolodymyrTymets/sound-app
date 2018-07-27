@@ -4,10 +4,8 @@ import {
 } from './constants';
 
 
-const addSegment = (segment, spectrum, average, energy) => dispatch => {
+const addSegment = (average, energy) => dispatch => {
   dispatch({
-    segment,
-    spectrum,
     average,
     energy,
     type: ADD_SEGMENT,
