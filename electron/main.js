@@ -20,6 +20,7 @@ function createWindow() {
 
   // and load the index.html of the app.
   mainWindow.loadURL(`http://localhost:${process.env.PORT}`);
+  console.log('mainWindow ->', `http://localhost:${process.env.PORT}`)
 
   if (process.env.NODE_ENV !== 'production') {
     // Open the DevTools.
