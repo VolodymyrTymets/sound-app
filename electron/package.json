@@ -1,0 +1,17 @@
+{
+  "name": "electron",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "electron-dev": "electron ./main.js ",
+    "electron-prod": "NODE_ENV=production electron ./main.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "server": "file:../server",
+    "threads": "^0.12.0"
+  }
+}
