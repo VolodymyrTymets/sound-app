@@ -1,7 +1,8 @@
 const electron = require('electron');
-// Module to control application life.
+const { serverThreadWorker } = require('./src/start-server');
+require('dotenv').config();
+
 const app = electron.app;
-// Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
 const path = require('path');
@@ -12,11 +13,13 @@ const url = require('url');
 let mainWindow;
 
 function createWindow() {
+  serverThreadWorker.start();
+
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1080, height: 680});
+  mainWindow = new BrowserWindow({ width: 1080, height: 680 });
 
   // and load the index.html of the app.
-  mainWindow.loadURL('http://localhost:3000');
+  mainWindow.loadURL(`http://localhost:${process.env.PORT}`);
 
   if (process.env.NODE_ENV !== 'production') {
     // Open the DevTools.
@@ -24,11 +27,12 @@ function createWindow() {
   }
 
   // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
+  mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    mainWindow = null
+    mainWindow = null;
+    serverThreadWorker.stop();
   })
 }
 
@@ -53,6 +57,3 @@ app.on('activate', function () {
     createWindow()
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
