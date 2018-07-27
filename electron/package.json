@@ -6,6 +6,7 @@
   "scripts": {
     "electron-dev": "electron ./main.js ",
     "electron-prod": "NODE_ENV=production electron ./main.js",
+    "electron-prod-raspi": "MIC=1 NODE_ENV=production electron ./main.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },

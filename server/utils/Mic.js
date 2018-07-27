@@ -4,7 +4,7 @@ const WavDecoder = require('wav-decoder');
 const header = require("waveheader");
 const fs = require('fs');
 const path = require('path');
-const config = global.config;
+const config = require('../config');
 
 class Mic {
   constructor() {

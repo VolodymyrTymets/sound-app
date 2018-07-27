@@ -2,7 +2,7 @@ const _ = require('lodash');
 const { mic_data, find_segment } = require('../event-names');
 const mic = require('../../utils/Mic');
 const { Segmenter } = require('../../utils/segmenter');
-
+const { getTissueType } = require('../../utils/tissue-type-getter');
 const { fftThreadWorker } = require('../../utils/FFT');
 
 const skipArrayElements = (array, step = 4) => {
@@ -13,12 +13,7 @@ const skipArrayElements = (array, step = 4) => {
   return res;
 };
 
-const startRecord = client => data => {
-
-  global.config.mic.device = _.isUndefined(data.settings.mic) && global.config.mic.device || `plughw:${data.settings.mic}`;
-  global.config.LIMIT_OF_SILENCE = parseFloat(data.settings.segmentationValue) || global.config.LIMIT_OF_SILENCE;
-  global.config.FILE_NAME = data.settings.fileName;
-
+const startRecord = client => () => {
   let waves = [];
   const segmenter = new Segmenter();
 
@@ -38,7 +33,7 @@ const startRecord = client => data => {
 
     fftThreadWorker.start(segment, (response) => {
       const { spectrum, energy } = response;
-      const tissueType = 'nerve';
+      const tissueType = getTissueType(spectrum, energy);
 
       client.emit(find_segment, {
         average,
