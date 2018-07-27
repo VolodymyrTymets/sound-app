@@ -7,10 +7,19 @@ const path = require('path');
 const config = global.config;
 
 class Mic {
-  _catch(error) {
-    console.log('Mic ->');
-    console.log(error);
+  constructor() {
+    this._writeIntoFile = this._writeIntoFile.bind(this);
+    this.log = this.log.bind(this);
   }
+  _writeIntoFile(fileName) {
+    const dir = path.resolve(__dirname, '../assets/');
+    if (!fs.existsSync(dir)){
+      fs.mkdirSync(dir);
+    }
+    const outputFileStream = fs.WriteStream(path.resolve(dir, fileName));
+    this._micInputStream.pipe(outputFileStream);
+  }
+
   _createInstance () {
     delete  this._micInputStream;
     delete  this._micInstance;
@@ -18,13 +27,16 @@ class Mic {
       debug: false,
     }));
     this._micInputStream = this._micInstance.getAudioStream();
-    this._micInputStream.on('error', function(err) {
-      console.log("Error in Input Stream: " + err);
-    });
+    this._micInputStream.on('error', this.log);
+  }
+  log(message) {
+    console.log(`-> [Mic]: ${message.message || message}`);
+    if (message.message) {
+      console.log(message);
+    }
   }
   start(onData) {
     try {
-      console.log('config.mic.device ->', config.mic.device)
       this._createInstance();
       this._micInputStream.on('data', buffer => {
         WavDecoder.decode(Buffer.concat([header(config.mic.rate), buffer]))
@@ -32,21 +44,11 @@ class Mic {
           .catch(this._catch);
       });
 
-      if(global.config.FILE_NAME) {
-
-        const dir = path.resolve(__dirname, '../assets/', global.config.FILE_NAME);
-        console.log('dir ->', dir)
-         if (!fs.existsSync(dir)){
-          fs.mkdirSync(dir);
-        }
-        const outputFileStream = fs.WriteStream(path.resolve(dir,'output.wav'));
-
-        this._micInputStream.pipe(outputFileStream);
-      }
+      // this._writeIntoFile(process.env.FILE_NAME);
 
       this._micInstance.start();
     } catch (error) {
-      this._catch(error);
+      this.log(error);
     }
   }
   stop() {
