@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "socet-sound-app",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "jsonfile": "^4.0.0"
+  },
   "devDependencies": {
     "@ljharb/eslint-config": "^12.2.1",
     "babel-eslint": "^7.2.3",

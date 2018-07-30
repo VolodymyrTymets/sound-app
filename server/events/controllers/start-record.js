@@ -16,7 +16,6 @@ const skipArrayElements = (array, step = 4) => {
 const startRecord = client => () => {
   let waves = [];
   const segmenter = new Segmenter();
-
   mic.start((audioData, buffer) => {
     const wave = audioData.channelData[0];
     waves.push(wave);
@@ -32,14 +31,14 @@ const startRecord = client => () => {
     const segmentToClient = skipArrayElements(segment);
 
     fftThreadWorker.start(segment, (response) => {
-      const { spectrum, energy } = response;
-      const tissueType = getTissueType(spectrum, energy);
+      const { spectrum, energy, similarity, tissueType } = response;
 
       client.emit(find_segment, {
         average,
         energy,
         tissueType,
         spectrum,
+        similarity,
         segment: segmentToClient,
       });
     });
