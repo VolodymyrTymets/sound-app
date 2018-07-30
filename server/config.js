@@ -7,5 +7,8 @@ module.exports = {
     device: `plughw:${process.env.MIC || 0}`,
     fileType: 'wav',
   },
-  LIMIT_OF_SILENCE: 1,
+  minEnergy: 0.36,
+  maxEnergy: 0.38,
+  minSpectrum: 0.6,
+  maxSpectrum: 0.6,
 };

@@ -4,7 +4,7 @@ const mic = require('../../utils/Mic');
 const { Segmenter } = require('../../utils/segmenter');
 const { fft, spliceSpectrum } = require('../../utils/fft');
 const { getSpectrumEnergy } = require('../../utils/spectrum-energy');
-
+const { getTissueType } = require('../../utils/tissue-type-getter');
 const WAVE_SKIP_STEP = 4;
 
 const sendSegmentRes = ({ segment, spectrum, average, energy, tissueType }, client) => {
@@ -32,12 +32,7 @@ const sendRecordRes = (waves, client) => {
 };
 
 
-const startRecord = client => data => {
-
-  global.config.mic.device = _.isUndefined(data.settings.mic) && global.config.mic.device || `plughw:${data.settings.mic}`;
-  global.config.LIMIT_OF_SILENCE = parseFloat(data.settings.segmentationValue) || global.config.LIMIT_OF_SILENCE;
-  global.config.FILE_NAME = data.settings.fileName;
-
+const startRecord = client => () => {
   let waves = [];
   const segmenter = new Segmenter();
 
@@ -56,13 +51,7 @@ const startRecord = client => data => {
     const { spectrum } = fft(segment);
     const energy = getSpectrumEnergy(spectrum, 10);
     console.log(`find segment -> [${segment.length}] energy [${energy}]`, );
-    let tissueType = '';
-    if(energy > 0.38) {
-      tissueType = 'nerve';
-    }
-    if(energy > 0.36 && energy < 0.38) {
-      tissueType = 'muscle';
-    }
+    const tissueType = getTissueType(spectrum, energy);
     sendSegmentRes({ segment, spectrum, average, energy, tissueType }, client);
   });
 };
