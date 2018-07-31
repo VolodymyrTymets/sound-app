@@ -1,4 +1,4 @@
-const { config } = require('../config');
+const { config } = require('../../config');
 
 const getTissueType = (spectrum, energy) => {
 	let tissueType = '';

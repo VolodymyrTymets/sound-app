@@ -1,7 +1,7 @@
-const { fft, spliceSpectrum } = require('./fft');
+const { fft, spliceSpectrum } = require('./utils/fft');
 const { getSpectrumEnergy } = require('./utils/get-spectrum-energy');
-const { getSimilarity } = require('./utils/similarity-array');
-const { getTissueType } = require('./utils//tisue-type-getter');
+const { getSimilarity } = require('./utils/similarity');
+const { getTissueType } = require('./utils/tisue-type-getter');
 const { config } = require('../config');
 
 const getSpectrumInfo = (wave, done) => {

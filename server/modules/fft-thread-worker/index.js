@@ -1,3 +1,3 @@
-const { getSpectrumInfo } = require('./src/fft-thread-worker');
+const { getSpectrumInfo, config } = require('./src/fft-thread-worker');
 
-module.exports = { getSpectrumInfo };
+module.exports = { getSpectrumInfo, config };
