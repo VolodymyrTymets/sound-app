@@ -5,18 +5,17 @@ const header = require('waveheader');
 const fs = require('fs');
 const path = require('path');
 const config = require('../config');
+const { storage } = require('../utils/storage');
+
 
 class Mic {
 	constructor() {
 		this._writeIntoFile = this._writeIntoFile.bind(this);
 		this.log = this.log.bind(this);
+		this._FILE_NAME = 'track.wav';
 	}
-	_writeIntoFile(fileName) {
-		const dir = path.resolve(__dirname, '../assets/');
-		if (!fs.existsSync(dir)){
-			fs.mkdirSync(dir);
-		}
-		const outputFileStream = fs.WriteStream(path.resolve(dir, fileName));
+	_writeIntoFile() {
+		const outputFileStream = fs.WriteStream(path.resolve(storage.getFolderName(), this._FILE_NAME));
 		this._micInputStream.pipe(outputFileStream);
 	}
 
@@ -44,7 +43,7 @@ class Mic {
 					.catch(this._catch);
 			});
 
-			// this._writeIntoFile(process.env.FILE_NAME);
+			this._writeIntoFile();
 
 			this._micInstance.start();
 		} catch (error) {
