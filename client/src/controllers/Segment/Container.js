@@ -24,11 +24,12 @@ const enhance = compose(
 			},
 			axisY: {
 				includeZero: false,
-				minimum: -1,
-				maximum: 1,
+				minimum: -2,
+				maximum: 2,
 			},
 			data: [{
 				type: 'line',
+				markerType: 'none',
 				dataPoints: [],
 			}],
 		}),

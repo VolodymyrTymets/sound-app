@@ -10,11 +10,11 @@ app.use(express.static(path.resolve(__dirname, './public/build/')));
 
 
 app.get('/api/v1/mean-spectrum', (req, res) => {
-  res.status(200).send({ meanSpectrum, meanEnergy });
+	res.status(200).send({ meanSpectrum, meanEnergy });
 });
 
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './public/build/', './index.html'));
+	res.sendFile(path.resolve(__dirname, './public/build/', './index.html'));
 });
 
 

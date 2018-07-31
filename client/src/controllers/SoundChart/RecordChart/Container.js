@@ -19,11 +19,12 @@ const enhance = compose(
 				},
 				axisY: {
 					includeZero: false,
-					minimum: -1.5,
-					maximum: 1.5,
+					minimum: -2,
+					maximum: 2,
 				},
 				data: [{
 					type: 'line',
+					markerType: 'none',
 					dataPoints: dps
 				}]
 			});
