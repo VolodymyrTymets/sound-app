@@ -34,14 +34,15 @@ const decodeSingleIn = async (folderPath, fileName) => {
 
 	const wave = audioData.channelData[0];
 	const { spectrum } = fft(wave);
-	const { splicedSpectrum } = spliceSpectrum(spectrum);
+	const { splicedSpectrum, maxIndex } = spliceSpectrum(spectrum);
 	const res = [];
 
 	range(config.N, splicedSpectrum.length).forEach(() => res.push({
 		frequency:0, amplitude: 0,
 	}));
 	splicedSpectrum.forEach(x=> res.push(x));
-	const energy = getSpectrumEnergy(spectrum, 10);
+	const energy = getSpectrumEnergy(spectrum, maxIndex, 10);
+	console.log('energy ->', energy)
 	jsonfile.writeFileSync(outFilePath, { energy, meanSpectrum: res});
 };
 

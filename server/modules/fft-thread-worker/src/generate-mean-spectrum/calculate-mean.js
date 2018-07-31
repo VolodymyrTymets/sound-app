@@ -47,8 +47,11 @@ const readOutFolder = (folderPath) => new Promise((resolve, reject) => {
 
 const clearOutFolder = (folderPath) => new Promise((resolve, reject) => {
 	const outFolderPath = path.resolve(folderPath, './out');
+  if (!fs.existsSync(outFolderPath)){
+    fs.mkdirSync(outFolderPath);
+  }
 	fs.readdir(outFolderPath, async (err, files) => {
-		if (err) reject();
+		if (err) return reject(err);
 		let removed = 0;
 		if (!files.length) {
 			return resolve();
