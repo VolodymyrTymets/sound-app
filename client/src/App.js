@@ -7,14 +7,14 @@ import './styles.css';
 import MainPage from './pages/main';
 
 const App = ({ store }) =>
-  <Provider store={store}>
+  (<Provider store={store}>
     <MuiThemeProvider>
       <MainPage />
     </MuiThemeProvider>
-  </Provider>;
+   </Provider>);
 
 App.propTypes = {
-  store: PropTypes.object.isRequired,
+	store: PropTypes.object.isRequired,
 };
 
 export default App;

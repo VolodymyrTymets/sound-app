@@ -6,18 +6,18 @@ import { STOP, RECORD } from './redux/constants';
 import Component from './Component';
 
 const actions = {
-  [STOP]: 'startRecord',
-  [RECORD]: 'stopRecord',
+	[STOP]: 'startRecord',
+	[RECORD]: 'stopRecord',
 };
 
 const enhance = compose(
-  connect(state => ({
-    status: state.micStatus.status,
-    settings: state.settings,
-  }), { stopRecord, startRecord }),
-  withHandlers({
-    onClick: props => () => props[actions[props.status]](props.settings),
-  }),
+	connect(state => ({
+		status: state.micStatus.status,
+		settings: state.settings,
+	}), { stopRecord, startRecord }),
+	withHandlers({
+		onClick: props => () => props[actions[props.status]](props.settings),
+	}),
 );
 
 export default enhance(Component);
