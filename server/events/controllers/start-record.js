@@ -3,6 +3,7 @@ const { mic_data, find_segment } = require('../event-names');
 const mic = require('../../utils/Mic');
 const { Segmenter } = require('../../utils/segmenter');
 const { fftThreadWorker } = require('../../utils/FFT');
+const { notify } = require('../../utils/notifier');
 
 const skipArrayElements = (array, step = 4) => {
 	const res = [];
@@ -34,6 +35,7 @@ const startRecord = client => () => {
 			const { spectrum, energy, similarity, tissueType } = response;
 			if(tissueType) {
 				segmenter.saveTissue(buffer, tissueType);
+				notify();
 			}
 			client.emit(find_segment, {
 				average,

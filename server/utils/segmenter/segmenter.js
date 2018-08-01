@@ -1,8 +1,8 @@
 const _ = require('lodash');
-const moment = require('moment');
 const { EventEmitter } = require('events');
+const header = require('waveheader');
 const { storage } = require('../storage');
-const path = require('path');
+const config = require('../../config');
 const fs = require('fs');
 
 const N = 100;
@@ -34,14 +34,18 @@ class Segmentor extends EventEmitter {
 	}
 
 	_saveSegment(buffer) {
-		fs.writeFile(storage.getSegmentsFolder(this._startDate), buffer, err => {
+		fs.writeFile(
+			storage.getSegmentsFolder(this._startDate),
+      Buffer.concat([header(config.mic.rate), buffer]), err => {
 			if(err) {
 				return console.log(err);
 			}
 		});
 	}
 	saveTissue(buffer, typeOfTissue) {
-		fs.writeFile(storage.getTissueFolder(this._startDate, typeOfTissue), buffer, err => {
+		fs.writeFile(
+			storage.getTissueFolder(this._startDate, typeOfTissue),
+      Buffer.concat([header(config.mic.rate), buffer]), err => {
 			if(err) {
 				return console.log(err);
 			}
@@ -77,8 +81,8 @@ class Segmentor extends EventEmitter {
 		if (average < this._limitOfSilence) {
 			if (this._waves.length >= minWavesCount) {
 				const segment = _.flatten(this._waves);
-				this._saveSegment(buffer);
-				this.emit('segment', segment, average, buffer);
+				this._saveSegment(this._buffers);
+				this.emit('segment', segment, average, this._buffers);
 			}
 
 			this._waves = [];
