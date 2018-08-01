@@ -14,7 +14,6 @@ class FFTThreadWorker {
 	start(wave, callback) {
 		this._thread = spawn(function (input, done) {
 			const { getSpectrumInfo } = require('fft-thread-worker');
-			console.log('input.wave ->', input.wave.length);
 			getSpectrumInfo(input.wave, done);
 		})
 			.on('message', (response) => {

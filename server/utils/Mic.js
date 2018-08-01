@@ -14,8 +14,8 @@ class Mic {
 		this.log = this.log.bind(this);
 		this._FILE_NAME = 'track.wav';
 	}
-	_writeIntoFile() {
-		const outputFileStream = fs.WriteStream(path.resolve(storage.getFolderName(), this._FILE_NAME));
+	_writeIntoFile(startDate) {
+		const outputFileStream = fs.WriteStream(path.resolve(storage.getFolderName(startDate), this._FILE_NAME));
 		this._micInputStream.pipe(outputFileStream);
 	}
 
@@ -34,7 +34,7 @@ class Mic {
 			console.log(message);
 		}
 	}
-	start(onData) {
+	start(startDate, onData) {
 		try {
 			this._createInstance();
 			this._micInputStream.on('data', buffer => {
@@ -43,7 +43,7 @@ class Mic {
 					.catch(this._catch);
 			});
 
-			this._writeIntoFile();
+			this._writeIntoFile(startDate);
 
 			this._micInstance.start();
 		} catch (error) {

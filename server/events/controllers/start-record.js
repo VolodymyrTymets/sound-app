@@ -14,8 +14,9 @@ const skipArrayElements = (array, step = 4) => {
 
 const startRecord = client => () => {
 	let waves = [];
-	const segmenter = new Segmenter();
-	mic.start((audioData, buffer) => {
+	const recordTine = new Date()
+	const segmenter = new Segmenter(recordTine);
+	mic.start(recordTine, (audioData, buffer) => {
 		const wave = audioData.channelData[0];
 		waves.push(wave);
 		if (waves.length === 11) {
@@ -26,12 +27,14 @@ const startRecord = client => () => {
 		segmenter.findSegment(wave, 11, buffer); //min should be 11 waves = 1 second
 	});
 
-	segmenter.on('segment', (segment, average) => {
+	segmenter.on('segment', (segment, average, buffer) => {
 		const segmentToClient = skipArrayElements(segment);
 
 		fftThreadWorker.start(segment, (response) => {
 			const { spectrum, energy, similarity, tissueType } = response;
-
+			if(tissueType) {
+				segmenter.saveTissue(buffer, tissueType);
+			}
 			client.emit(find_segment, {
 				average,
 				energy,

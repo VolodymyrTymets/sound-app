@@ -1,5 +1,7 @@
 const _ = require('lodash');
+const moment = require('moment');
 const { EventEmitter } = require('events');
+const { storage } = require('../storage');
 const path = require('path');
 const fs = require('fs');
 
@@ -15,13 +17,13 @@ const N = 100;
             segmenter.findSegmant(wave)      
  **/
 class Segmentor extends EventEmitter {
-	constructor() {
+	constructor(startDate = new Date()) {
 		super();
 		this._waves = [];
 		this._everages = [];
 		this._limitOfSilence = 0;
 		this._timetoLearn = 4000; // 4s
-
+		this._startDate = startDate;
 		// take every 4s limit of sielence
 		setInterval(() => {
 			this._limitOfSilence = _.mean(this._everages);
@@ -31,13 +33,18 @@ class Segmentor extends EventEmitter {
 		this._buffers = new ArrayBuffer([]);
 	}
 
-	_saveSegment(buffer, segment) {
-		const filePath = path.resolve(__dirname, '../../', 'assets', './segments',  `${segment.length}.wav`);
-		fs.writeFile(filePath, buffer, err => {
+	_saveSegment(buffer) {
+		fs.writeFile(storage.getSegmentsFolder(this._startDate), buffer, err => {
 			if(err) {
 				return console.log(err);
 			}
-			console.log(`${segment.length}.wav is saved`);
+		});
+	}
+	saveTissue(buffer, typeOfTissue) {
+		fs.writeFile(storage.getTissueFolder(this._startDate, typeOfTissue), buffer, err => {
+			if(err) {
+				return console.log(err);
+			}
 		});
 	}
 
@@ -70,7 +77,8 @@ class Segmentor extends EventEmitter {
 		if (average < this._limitOfSilence) {
 			if (this._waves.length >= minWavesCount) {
 				const segment = _.flatten(this._waves);
-				this.emit('segment', segment, average);
+				this._saveSegment(buffer);
+				this.emit('segment', segment, average, buffer);
 			}
 
 			this._waves = [];
