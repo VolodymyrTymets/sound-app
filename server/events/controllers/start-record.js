@@ -20,8 +20,8 @@ const startRecord = client => () => {
 		const wave = audioData.channelData[0];
 		waves.push(wave);
 		if (waves.length === 11) {
-			const waveToClient = _.flatten(waves.map(w => skipArrayElements(w)));
-			client.emit(mic_data, waveToClient);
+			// const waveToClient = _.flatten(waves.map(w => skipArrayElements(w)));
+			// client.emit(mic_data, waveToClient);
 			waves = [];
 		}
 		segmenter.findSegment(wave, 11, buffer); //min should be 11 waves = 1 second
