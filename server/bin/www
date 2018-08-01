@@ -36,6 +36,7 @@ socets(server);
  */
 
 server.listen(port, (arg) => {
+  let host = '';
   Object.keys(ifaces).forEach(function (ifname) {
     var alias = 0;
 
@@ -47,14 +48,16 @@ server.listen(port, (arg) => {
 
       if (alias >= 1) {
         // this single interface has multiple ipv4 addresses
-        console.log(ifname + ':' + alias, iface.address);
+        host = `${ifname} :${alias}${iface.address}`;
       } else {
         // this interface has only one ipv4 adress
-        console.log(ifname, iface.address);
+        host = `${ifname} ${iface.address}`;
       }
       ++alias;
     });
   });
+
+  console.log(`Server listening on ${host}:${port} ...`)
 });
 server.on('error', onError);
 server.on('listening', onListening);
