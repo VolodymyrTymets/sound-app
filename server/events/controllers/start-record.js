@@ -3,6 +3,7 @@ const { mic_data, find_segment } = require('../event-names');
 const mic = require('../../utils/Mic');
 const { Segmenter } = require('../../utils/segmenter');
 const { fftThreadWorker } = require('../../utils/FFT');
+const { rectangleGeneratorThreadWorker } = require('../../utils/RectangleGenertor');
 
 const skipArrayElements = (array, step = 4) => {
 	const res = [];
@@ -14,8 +15,9 @@ const skipArrayElements = (array, step = 4) => {
 
 const startRecord = client => () => {
 	let waves = [];
-	const recordTine = new Date()
+	const recordTine = new Date();
 	const segmenter = new Segmenter(recordTine);
+	rectangleGeneratorThreadWorker.start(1);
 	mic.start(recordTine, (audioData, buffer) => {
 		const wave = audioData.channelData[0];
 		waves.push(wave);
