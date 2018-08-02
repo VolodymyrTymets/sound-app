@@ -19,8 +19,8 @@ const enhance = compose(
 				},
 				axisY: {
 					includeZero: false,
-					minimum: -2,
-					maximum: 2,
+					minimum: -0.5,
+					maximum: 0.5,
 				},
 				data: [{
 					type: 'line',

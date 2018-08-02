@@ -1,0 +1,1 @@
+./node_modules/.bin/electron-rebuild -v 2.0.5
