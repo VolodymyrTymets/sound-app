@@ -1,8 +1,9 @@
 const _ = require('lodash');
-const { mic_data, find_segment } = require('../event-names');
+const { mic_data, find_segment, recording } = require('../event-names');
 const mic = require('../../utils/Mic');
 const { Segmenter } = require('../../utils/segmenter');
 const { fftThreadWorker } = require('../../utils/FFT');
+const { notify } = require('../../utils/notifier');
 const { rectangleGeneratorThreadWorker } = require('../../utils/RectangleGenertor');
 
 const skipArrayElements = (array, step = 4) => {
@@ -24,6 +25,7 @@ const startRecord = client => () => {
 		if (waves.length === 11) {
 			// const waveToClient = _.flatten(waves.map(w => skipArrayElements(w)));
 			// client.emit(mic_data, waveToClient);
+			client.emit(recording, { success: true });
 			waves = [];
 		}
 		segmenter.findSegment(wave, 11, buffer); //min should be 11 waves = 1 second
@@ -36,6 +38,7 @@ const startRecord = client => () => {
 			const { spectrum, energy, similarity, tissueType } = response;
 			if(tissueType) {
 				segmenter.saveTissue(buffer, tissueType);
+				notify();
 			}
 			client.emit(find_segment, {
 				average,
