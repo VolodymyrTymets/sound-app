@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const { mic_data, find_segment } = require('../event-names');
+const { mic_data, find_segment, recording } = require('../event-names');
 const mic = require('../../utils/Mic');
 const { Segmenter } = require('../../utils/segmenter');
 const { fftThreadWorker } = require('../../utils/FFT');
@@ -14,7 +14,7 @@ const skipArrayElements = (array, step = 4) => {
 
 const startRecord = client => () => {
 	let waves = [];
-	const recordTine = new Date()
+	const recordTine = new Date();
 	const segmenter = new Segmenter(recordTine);
 	mic.start(recordTine, (audioData, buffer) => {
 		const wave = audioData.channelData[0];
@@ -22,6 +22,7 @@ const startRecord = client => () => {
 		if (waves.length === 11) {
 			const waveToClient = _.flatten(waves.map(w => skipArrayElements(w)));
 			client.emit(mic_data, waveToClient);
+			client.emit(recording, { success: true });
 			waves = [];
 		}
 		segmenter.findSegment(wave, 11, buffer); //min should be 11 waves = 1 second
