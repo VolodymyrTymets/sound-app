@@ -7,4 +7,5 @@ module.exports = {
     device: `plughw:${process.env.MIC || 0}`,
     fileType: 'wav',
   },
+  storeFolderName: 'Sound-app',
 };

@@ -13,11 +13,13 @@ const micStatus = (state = DEFAULT, action) => {
 		return {
 			...state,
 			status: STOP,
+			startRecordTime: null,
 		};
 	case START_RECORD:
 		return {
 			...state,
 			status: RECORD,
+			startRecordTime: new Date().getTime(),
 		};
 	default:
 		return state;
