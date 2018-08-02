@@ -10,7 +10,9 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "pack-linux": "electron-packager --overwrite --asar --platform=linux --arch=x64 --icon=./public/icons/icon.png --out=release-builds ./ sound-app",
-    "build": "sh prebuild.sh && NODE_ENV=production npm run pack-linux"
+    "pack-raspi": "electron-packager --overwrite --asar --platform=linux --arch=ia32, --icon=./public/icons/icon.png --out=release-builds ./ sound-app",
+    "build": "sh prebuild.sh && NODE_ENV=production npm run pack-linux",
+    "build-raspi": "sh prebuild.sh && NODE_ENV=production npm run pack-raspi"
   },
   "build": {
     "appId": "your.id",
