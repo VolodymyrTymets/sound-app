@@ -4,6 +4,7 @@ const mic = require('../../utils/Mic');
 const { Segmenter } = require('../../utils/segmenter');
 const { fftThreadWorker } = require('../../utils/FFT');
 const { notify } = require('../../utils/notifier');
+const config = require('../../config');
 const { rectangleGeneratorThreadWorker } = require('../../utils/RectangleGenertor');
 
 const skipArrayElements = (array, step = 4) => {
@@ -28,7 +29,7 @@ const startRecord = client => () => {
 			client.emit(recording, { success: true });
 			waves = [];
 		}
-		segmenter.findSegment(wave, 11, buffer); //min should be 11 waves = 1 second
+		segmenter.findSegment(wave, config.minSegmentLength, buffer);
 	});
 
 	segmenter.on('segment', (segment, average, buffer) => {

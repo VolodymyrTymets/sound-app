@@ -22,11 +22,12 @@ class Segmentor extends EventEmitter {
 		this._waves = [];
 		this._everages = [];
 		this._limitOfSilence = 0;
-		this._timetoLearn = 4000; // 4s
+		this._timetoLearn = 2000; // 4s
 		this._startDate = startDate;
 		// take every 4s limit of sielence
 		setInterval(() => {
 			this._limitOfSilence = _.mean(this._everages);
+			console.log('this._limitOfSilence ->', this._limitOfSilence)
 			this._everages = [];
 		}, this._timetoLearn);
 
@@ -78,7 +79,8 @@ class Segmentor extends EventEmitter {
 		const average = _.mean(sums);
 		this._everages.push(average);
 
-		if (average < this._limitOfSilence) {
+		if (average < this._limitOfSilence * 0.7) {
+			console.log({ average, length: this._waves.length })
 			if (this._waves.length >= minWavesCount) {
 				const segment = _.flatten(this._waves);
 				this._saveSegment(this._buffers);
@@ -89,6 +91,7 @@ class Segmentor extends EventEmitter {
 			this._buffers = [];
 			this.emit('noSegment');
 		} else {
+
 			this._waves.push(_.values(wave));
 			this._buffers = this._buffers.length ? Buffer.concat([this._buffers, buffer]) : buffer;
 		}

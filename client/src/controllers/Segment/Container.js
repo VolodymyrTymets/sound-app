@@ -61,7 +61,6 @@ const enhance = compose(
 				spectrumChart.options.data[0].dataPoints = spectrumToPoints(spectrum);
 				// segmentChart.render();
 				spectrumChart.render();
-				console.log('similarity ->', similarity);
 
 				this.props.addSegment(average, energy);
 				this.props.setTissueType(tissueType);

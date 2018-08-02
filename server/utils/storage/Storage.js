@@ -4,11 +4,12 @@ const moment = require('moment');
 const path = require('path');
 const fs = require('fs');
 const home = require('os').homedir();
+const config = require('../../config');
 
 class Storage {
 	constructor() {
 		usbDetect.startMonitoring();
-		this._appName = 'Sound-App';
+		this._appName = config.storeFolderName;
 		this._usbDriver = null;
 		this._dateFormat = 'DD-MM-YYYY';
 		this._minuteFormat = 'HH mm';
@@ -19,7 +20,7 @@ class Storage {
 		usbDetect.on('remove', () => {
 			this._usbDriver  = null;
 			const path = this.getPath();
-			console.log('local path -> ', path)
+			console.log('local path -> ', path);
 			this._socket && this._socket.emit(this._socketEventName, { path});
 		});
 

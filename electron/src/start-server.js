@@ -1,4 +1,5 @@
 const spawn = require('threads').spawn;
+const usb = require('usb-detection');
 
 class ServerThreadWorker {
   constructor() {
