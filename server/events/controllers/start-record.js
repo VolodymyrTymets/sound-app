@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const { mic_data, find_segment, recording } = require('../event-names');
-const mic = require('../../utils/Mic');
+const { Mic } = require('../../utils/Mic');
 const { Segmenter } = require('../../utils/segmenter');
 const { fftThreadWorker } = require('../../utils/FFT');
 const { notify } = require('../../utils/notifier');
@@ -14,10 +14,18 @@ const skipArrayElements = (array, step = 4) => {
 	return res;
 };
 
-const startRecord = client => () => {
+const startRecord = client => ({ settings }) => {
+	const mic = new Mic(settings);
+	if(global.mic) {
+		mic.stop();
+	}
+  global.mic = mic;
+
 	let waves = [];
 	const recordTine = new Date();
 	const segmenter = new Segmenter(recordTine);
+
+
 	mic.start(recordTine, (audioData, buffer) => {
 		const wave = audioData.channelData[0];
 		waves.push(wave);

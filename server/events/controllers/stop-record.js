@@ -1,8 +1,6 @@
-const mic = require('../../utils/Mic');
-
 const stopRecord = () => () => {
 	console.log('---> stop-record');
-	mic.stop();
+  global.mic && global.mic.stop();
 };
 
 module.exports = stopRecord;

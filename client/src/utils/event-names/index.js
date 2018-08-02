@@ -4,5 +4,6 @@ const list = {
 	mic_data: 'mic-data',
 	find_segment: 'find-segment',
 	recording: 'recording',
+  test_sound: 'test-sound',
 };
 export default list;

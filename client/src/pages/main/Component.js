@@ -2,7 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import PropTypes from 'prop-types';
 
-import { SoundChart, Segment, Timer, StorageInfo } from '../../controllers';
+import { SoundChart, Segment, Timer, StorageInfo, SettingForm } from '../../controllers';
 
 const MainPage = ({ getClassByTissueType, tissueType }) => (
 	<div className="container-fluid" style={{ backgroundColor: getClassByTissueType(tissueType) }}>
@@ -15,7 +15,7 @@ const MainPage = ({ getClassByTissueType, tissueType }) => (
 					<h4>Tissue: {tissueType}</h4>
 				</div>
 			</div>
-
+      <SettingForm />
 			<SoundChart />
 			<Segment />
       <StorageInfo />

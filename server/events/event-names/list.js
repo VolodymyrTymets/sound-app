@@ -4,6 +4,7 @@ const events = {
 	mic_data: 'mic-data',
 	find_segment: 'find-segment',
 	recording: 'recording',
+  test_sound: 'test-sound',
 };
 
 module.exports = events;

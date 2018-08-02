@@ -27,7 +27,6 @@ class Segmentor extends EventEmitter {
 		// take every 4s limit of sielence
 		setInterval(() => {
 			this._limitOfSilence = _.mean(this._everages);
-			console.log('this._limitOfSilence ->', this._limitOfSilence)
 			this._everages = [];
 		}, this._timetoLearn);
 
