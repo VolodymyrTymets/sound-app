@@ -4,6 +4,7 @@ rm -rf  server/public/build
 rm -rf  electron/node_modules/server
 
 cd client
+npm i
 npm run build
 cd ..
 

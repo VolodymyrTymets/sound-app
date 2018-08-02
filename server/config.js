@@ -8,4 +8,5 @@ module.exports = {
     fileType: 'wav',
   },
   storeFolderName: 'Sound-app',
+  minSegmentLength: 5, // 500 ms
 };
