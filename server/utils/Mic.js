@@ -7,12 +7,12 @@ const path = require('path');
 const config = require('../config');
 const { storage } = require('../utils/storage');
 
-
 class Mic {
-	constructor() {
+	constructor(setting) {
 		this._writeIntoFile = this._writeIntoFile.bind(this);
 		this.log = this.log.bind(this);
 		this._FILE_NAME = 'track.wav';
+		this._micDevice = setting && setting.mic;
 	}
 	_writeIntoFile(startDate) {
 		const outputFileStream = fs.WriteStream(path.resolve(storage.getFolderName(startDate), this._FILE_NAME));
@@ -24,6 +24,7 @@ class Mic {
 		delete  this._micInstance;
 		this._micInstance = mic(_.extend(config.mic, {
 			debug: false,
+      device: this._micDevice || config.mic.device,
 		}));
 		this._micInputStream = this._micInstance.getAudioStream();
 		this._micInputStream.on('error', this.log);
@@ -51,9 +52,9 @@ class Mic {
 		}
 	}
 	stop() {
-		this._micInstance.stop();
+    this._micInstance && this._micInstance.stop();
 	}
 }
-const micInstance = new Mic();
 
-module.exports = micInstance;
+
+module.exports = { Mic };

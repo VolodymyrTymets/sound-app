@@ -3,32 +3,34 @@ import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
 
-const Segments = ({ onChange, settings }) => (
+const Segments = ({ onChange, onTestSoundClick, settings }) => (
 	<div className="row">
-		<div className="col-md-10 col-lg-10">
-			<TextField
-				fullWidth
-				floatingLabelText="File Name"
-				onChange={onChange('fileName')}
-				defaultValue={settings.fileName}
-			/><br />
+		<div className="col-md-6 col-lg-6">
+      <RaisedButton
+        fullWidth
+        label="Test Sound"
+        className="align-content m-t-15"
+        onClick={onTestSoundClick}
+      />
 
 		</div>
-		<div className="col-md-2 col-lg-2">
+		<div className="col-md-6 col-lg-6">
 			<SelectField
 				floatingLabelText="Frequency"
 				value={settings.mic}
 				onChange={onChange('mic')}
 			>
-				<MenuItem value={0} primaryText="plughw:0" />
-				<MenuItem value={1} primaryText="plughw:1" />
+				<MenuItem value="plughw:0" primaryText="plughw:0" />
+				<MenuItem value="plughw:1" primaryText="plughw:1" />
+        <MenuItem value="plughw:2" primaryText="plughw:2" />
 			</SelectField>
 		</div>
 		<div className="col-md-6 col-lg-6">
 			<TextField
 				fullWidth
-				floatingLabelText="Середнє начення суми 100 фрагментів (сегментація)"
+				floatingLabelText="Середня довжина сегмента"
 				onChange={onChange('segmentationValue')}
 				defaultValue={settings.segmentationValue}
 			/><br />
@@ -55,6 +57,7 @@ const Segments = ({ onChange, settings }) => (
 
 Segments.propTypes = {
 	onChange: PropTypes.func.isRequired,
+  onTestSoundClick: PropTypes.func.isRequired,
 	settings: PropTypes.object.isRequired,
 };
 

@@ -1,6 +1,5 @@
 const electron = require('electron');
 const { serverThreadWorker } = require('./src/start-server');
-const usbDetect = require('usb-detection');
 require('dotenv').config();
 
 const app = electron.app;
