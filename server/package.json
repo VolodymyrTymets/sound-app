@@ -11,6 +11,7 @@
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
+    "dotenv": "^6.0.0",
     "drivelist": "^6.3.0",
     "express": "~4.15.5",
     "fft-thread-worker": "file:modules/fft-thread-worker",
