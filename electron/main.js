@@ -2,6 +2,7 @@ const electron = require('electron');
 const { serverThreadWorker } = require('./src/start-server');
 require('dotenv').config();
 
+
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
@@ -10,7 +11,7 @@ const BrowserWindow = electron.BrowserWindow;
 let mainWindow;
 
 function createWindow() {
-  serverThreadWorker.start();
+
 
   // Create the browser window.
   mainWindow = new BrowserWindow({ width: 1080, height: 680 });
@@ -29,10 +30,10 @@ function createWindow() {
   })
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+// // This method will be called when Electron has finished
+// // initialization and is ready to create browser windows.
+// // Some APIs can only be used after this event occurs.
+// app.on('ready', createWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -42,3 +43,7 @@ app.on('window-all-closed', function () {
     app.quit()
   }
 });
+
+
+// start server
+serverThreadWorker.start(createWindow);

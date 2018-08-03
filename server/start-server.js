@@ -5,7 +5,7 @@ const os = require('os');
 const ifaces = os.networkInterfaces();
 const socets = require('./src/events');
 
-const startServer = (PORT, config) => {
+const startServer = (PORT, config, done) => {
 
 	/**
 	 * Get port from environment and store in Express.
@@ -52,8 +52,11 @@ const startServer = (PORT, config) => {
 				++alias;
 			});
 		});
-
-		console.log(`Server listening on ${host}:${port} ...`)
+    const message = `Server listening on ${host}:${port} ...`;
+    if(done) {
+    	return done({ message })
+		}
+		return console.log(message);
 	});
 	server.on('error', onError);
 	server.on('listening', onListening);

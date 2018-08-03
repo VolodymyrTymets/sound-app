@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 const { startServer } = require('../start-server');
-const { config } = require('../../config');
+const { config } = require('../../electron/config');
 
 startServer(process.env.PORT, config);

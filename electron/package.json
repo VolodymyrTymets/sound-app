@@ -9,6 +9,7 @@
     "dist": "electron-builder",
     "pack-linux": "NODE_ENV=production electron-packager --overwrite --asar --platform=linux --arch=x64 --icon=./public/icons/icon.png --out=release-builds ./ sound-app",
     "pack-raspi": "NODE_ENV=production electron-packager --overwrite --asar --platform=linux --arch=ia32, --icon=./public/icons/icon.png --out=release-builds ./ sound-app",
+    "package-mac": "NODE_ENV=production electron-packager --overwrite --platform=darwin --arch=x64 --icon=./public/icons/icon.incs --prune=true --out=release-builds ./ sound-app",
     "build": "sh prebuild.sh npm run pack-linux",
     "build-raspi": "sh prebuild.shnpm run pack-raspi"
   },
