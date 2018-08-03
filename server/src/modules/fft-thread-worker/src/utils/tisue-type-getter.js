@@ -1,8 +1,8 @@
 const { config } = require('../../config');
 
-const getTissueType = (spectrum, energy) => {
+const getTissueType = (spectrum, energy, minEnergy) => {
 	let tissueType = '';
-	if (energy > config.meanEnergy * 0.8) {
+	if (energy > (minEnergy || config.meanEnergy) * 0.8) {
 		tissueType = 'nerve';
 	}
 	// if (energy < config.minEnergy) {
