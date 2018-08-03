@@ -1,5 +1,5 @@
 const spawn = require('threads').spawn;
-const { config } = require('../config');
+const config = require('../config/config.prod');
 
 class ServerThreadWorker {
   constructor() {
