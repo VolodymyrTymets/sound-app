@@ -6,7 +6,8 @@ import {
 const DEFAULT = {
 	fileName: 'record',
 	mic: 'plughw:0',
-	segmentationValue: 5,
+	meanSegmentLength: 5,
+	minSegmentTimeToListen: 2000,
 	minEnergy: 0.4,
 	maxEnergy: 0.6,
 };

@@ -11,16 +11,16 @@ class FFTThreadWorker {
 		console.log(`-> [FFTThreadWorker]: ${message.message || message}`);
 	}
 
-	start(wave, callback) {
+	start(wave, minEnergy, callback) {
 		this._thread = spawn(function (input, done) {
 			const { getSpectrumInfo } = require('fft-thread-worker');
-			getSpectrumInfo(input.wave, done);
+			getSpectrumInfo(input.wave, input.minEnergy, done);
 		})
 			.on('message', (response) => {
 				callback(response);
 				this._thread.kill();
 			})
-			.send({ wave })
+			.send({ wave, minEnergy })
 			.on('error', this.log)
 			.on('exit', () => this.log('stopped!'));
 	}

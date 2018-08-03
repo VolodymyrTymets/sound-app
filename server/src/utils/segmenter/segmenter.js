@@ -16,12 +16,13 @@ const N = 100;
             segmenter.findSegmant(wave)      
  **/
 class Segmentor extends EventEmitter {
-	constructor(startDate = new Date(), config) {
+	constructor(startDate = new Date(), config, settings) {
 		super();
 		this._waves = [];
 		this._everages = [];
 		this._limitOfSilence = 0;
-		this._timetoLearn = 2000; // 4s
+		this._meanSegmentLength = settings.meanSegmentLength || config.meanSegmentLength;
+		this._minSegmentTimeToListen = settings.minSegmentTimeToListen || config.minSegmentTimeToListen;
 		this._startDate = startDate;
 		this._config = config;
 		this._storage = new Storage(config);
@@ -29,7 +30,7 @@ class Segmentor extends EventEmitter {
 		setInterval(() => {
 			this._limitOfSilence = _.mean(this._everages);
 			this._everages = [];
-		}, this._timetoLearn);
+		}, this._minSegmentTimeToListen);
 
 		this._buffers = new ArrayBuffer([]);
 	}
@@ -68,7 +69,7 @@ class Segmentor extends EventEmitter {
  *  filter noiz from wave, by equall sum of 100 ponts with standart (SUM_OF_100)
  *  @param {Array} 
  **/
-	findSegment(wave, minWavesCount, buffer) {
+	findSegment(wave, buffer) {
 		const sums = [];
 		for (let index = 0; index < wave.length; index = index + N) {
 			const slice = wave.slice(index, index + N);
@@ -80,7 +81,7 @@ class Segmentor extends EventEmitter {
 		this._everages.push(average);
 
 		if (average < this._limitOfSilence * 0.7) {
-			if (this._waves.length >= minWavesCount) {
+			if (this._waves.length >= this._meanSegmentLength) {
 				const segment = _.flatten(this._waves);
 				this._saveSegment(this._buffers);
 				this.emit('segment', segment, average, this._buffers);

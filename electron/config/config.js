@@ -12,5 +12,5 @@ module.exports = {
   storeFolderName: 'Sound-app',
 	assetsPath: path.resolve(__dirname, '../',  './server/private/assets'),
   minSegmentLength: 5, // 500 ms,
-	timeToLearn: 2000, // 500 ms
+	minSegmentTimeToListen: 2000, // 500 ms
 };

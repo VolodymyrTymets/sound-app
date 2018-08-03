@@ -14,6 +14,7 @@ const skipArrayElements = (array, step = 4) => {
 };
 
 const startRecord = (client, config) => ({ settings }) => {
+	console.log({ settings });
 	const mic = new Mic(settings, config);
 	if(global.mic) {
 		mic.stop();
@@ -22,7 +23,7 @@ const startRecord = (client, config) => ({ settings }) => {
 
 	let waves = [];
 	const recordTine = new Date();
-	const segmenter = new Segmenter(recordTine, config);
+	const segmenter = new Segmenter(recordTine, config, settings);
 
 
 	mic.start(recordTine, (audioData, buffer) => {
@@ -34,13 +35,13 @@ const startRecord = (client, config) => ({ settings }) => {
 			client.emit(recording, { success: true });
 			waves = [];
 		}
-		segmenter.findSegment(wave, config.minSegmentLength, buffer);
+		segmenter.findSegment(wave, buffer);
 	});
 
-	segmenter.on('segment', (segment, average, buffer) => {
+	segmenter.on('segment', (segment,  average, buffer) => {
 		const segmentToClient = skipArrayElements(segment);
-
-		fftThreadWorker.start(segment, (response) => {
+    const minEnergy = settings.minEnergy && parseFloat(settings.minEnergy);
+		fftThreadWorker.start(segment, minEnergy, (response) => {
 			const { spectrum, energy, similarity, tissueType } = response;
 			if(tissueType) {
 				segmenter.saveTissue(buffer, tissueType);
