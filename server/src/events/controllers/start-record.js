@@ -4,7 +4,6 @@ const { Mic } = require('../../utils/Mic');
 const { Segmenter } = require('../../utils/segmenter');
 const { fftThreadWorker } = require('../../utils/FFT');
 const { notify } = require('../../utils/notifier');
-const config = require('../../config');
 
 const skipArrayElements = (array, step = 4) => {
 	const res = [];
@@ -14,8 +13,8 @@ const skipArrayElements = (array, step = 4) => {
 	return res;
 };
 
-const startRecord = client => ({ settings }) => {
-	const mic = new Mic(settings);
+const startRecord = (client, config) => ({ settings }) => {
+	const mic = new Mic(settings, config);
 	if(global.mic) {
 		mic.stop();
 	}
@@ -23,7 +22,7 @@ const startRecord = client => ({ settings }) => {
 
 	let waves = [];
 	const recordTine = new Date();
-	const segmenter = new Segmenter(recordTine);
+	const segmenter = new Segmenter(recordTine, config);
 
 
 	mic.start(recordTine, (audioData, buffer) => {
@@ -45,7 +44,7 @@ const startRecord = client => ({ settings }) => {
 			const { spectrum, energy, similarity, tissueType } = response;
 			if(tissueType) {
 				segmenter.saveTissue(buffer, tissueType);
-				notify();
+				notify(config.assetsPath);
 			}
 			client.emit(find_segment, {
 				average,

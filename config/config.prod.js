@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   mic: {
     rate: 44100,
@@ -8,5 +10,7 @@ module.exports = {
     fileType: 'wav',
   },
   storeFolderName: 'Sound-app',
-  minSegmentLength: 5, // 500 ms
+	assetsPath: path.resolve(__dirname, '../', '../', '/assets'),
+  minSegmentLength: 5, // 500 ms,
+	timeToLearn: 2000, // 500 ms
 };

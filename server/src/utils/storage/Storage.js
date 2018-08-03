@@ -2,10 +2,9 @@ const moment = require('moment');
 const path = require('path');
 const fs = require('fs');
 const home = require('os').homedir();
-const config = require('../../config');
 
 class Storage {
-	constructor() {
+	constructor(config) {
 		this._appName = config.storeFolderName;
 		this._dateFormat = 'DD-MM-YYYY';
 		this._minuteFormat = 'HH mm';
@@ -53,6 +52,4 @@ class Storage {
 	}
 }
 
-const storage = new Storage();
-
-module.exports = { storage };
+module.exports = { Storage };
