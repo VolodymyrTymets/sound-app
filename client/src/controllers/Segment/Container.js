@@ -5,7 +5,7 @@ import axios from 'axios';
 import { addSegment, setTissueType } from './redux/actions';
 import socket from '../../utils/socket';
 import list from '../../utils/event-names';
-
+import { notify } from '../../utils/notifier';
 import Component from './Component';
 import CanvasJS from '../../utils/canvasjs.min';
 
@@ -61,6 +61,10 @@ const enhance = compose(
 				spectrumChart.options.data[0].dataPoints = spectrumToPoints(spectrum);
 				// segmentChart.render();
 				spectrumChart.render();
+
+				if(tissueType === 'nerve') {
+					notify()
+				}
 
 				this.props.addSegment(average, energy);
 				this.props.setTissueType(tissueType);
