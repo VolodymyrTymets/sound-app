@@ -10,7 +10,7 @@
     "copy-assets": "cp -r ../server/private/assets/ ./release-builds/sound-app-linux-x64/resources/",
     "pack-linux": "NODE_ENV=production electron-packager --overwrite --asar  --prune=true --platform=linux --arch=x64 --icon=./public/icons/icon.png --out=release-builds ./ sound-app",
     "pack-raspi": "NODE_ENV=production electron-packager --overwrite --asar --platform=linux --arch=armv7l, --icon=./public/icons/icon.png --out=release-builds ./ sound-app",
-    "package-mac": "NODE_ENV=production electron-packager --overwrite --platform=darwin --arch=x64 --icon=./public/icons/icon.incs --prune=true --out=release-builds ./ sound-app",
+    "pack-mac": "NODE_ENV=production electron-packager --overwrite --platform=darwin --arch=x64 --icon=./public/icons/icon.incs --prune=true --out=release-builds ./ sound-app",
     "build": "sh prebuild.sh && npm run pack-linux && npm run copy-assets",
     "build-raspi": "sh prebuild.sh && npm run pack-raspi"
   },
