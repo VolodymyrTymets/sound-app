@@ -7,7 +7,7 @@ class Storage {
 	constructor(config) {
 		this._appName = config.storeFolderName;
 		this._dateFormat = 'DD-MM-YYYY';
-		this._minuteFormat = 'HH mm';
+		this._minuteFormat = 'HH:mm:ss';
 	}
 
 	getPath() {
@@ -32,7 +32,7 @@ class Storage {
 
 	_getFileNameByTime(startRecordDate) {
 		const duration = moment.duration(moment().diff(startRecordDate));
-		return`${duration.minutes()} m ${duration.seconds()} s`;
+		return`${duration.hours()}:${duration.minutes()}:${duration.seconds()}:`;
 	}
 	getSegmentsFolder(startRecordDate) {
 	  const fileName = this._getFileNameByTime(startRecordDate);
