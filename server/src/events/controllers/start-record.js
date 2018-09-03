@@ -26,7 +26,7 @@ const startRecord = (client, config) => ({ settings }) => {
 	const recordTine = new Date();
 	const segmenter = new Segmenter(recordTine, config, settings);
 
-	rectangleGeneratorThreadWorker.start(1);
+	rectangleGeneratorThreadWorker.start(450);
 	mic.start(recordTine, (audioData, buffer) => {
 		const wave = audioData.channelData[0];
 		waves.push(wave);

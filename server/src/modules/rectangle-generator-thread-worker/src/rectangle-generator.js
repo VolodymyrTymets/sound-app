@@ -41,7 +41,7 @@ const generateRectangle = (freq, position, outNumber1, outNumber2, done) => {
 		}
 		times[step] - 1 && sleep.usleep(times[step -1]);
 		step ++;
-		console.log('.');
+		//console.log('.');
 	} while (true);
 	done();
 };
