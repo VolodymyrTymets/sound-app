@@ -30,12 +30,12 @@ const startRecord = (client, config) => ({ settings }) => {
 	mic.start(recordTine, (audioData, buffer) => {
 		const wave = audioData.channelData[0];
 		waves.push(wave);
-		if (waves.length === 11) {
-			const waveToClient = _.flatten(waves.map(w => skipArrayElements(w)));
-			client.emit(mic_data, waveToClient);
-			client.emit(recording, { success: true });
-			waves = [];
-		}
+		// if (waves.length === 11) {
+		// 	const waveToClient = _.flatten(waves.map(w => skipArrayElements(w)));
+		// 	client.emit(mic_data, waveToClient);
+		// 	client.emit(recording, { success: true });
+		// 	waves = [];
+		// }
 		segmenter.findSegment(wave, buffer);
 	});
 
