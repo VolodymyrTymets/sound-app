@@ -10,6 +10,7 @@ const generateRectangle = (freq, position, outNumber1, outNumber2, done) => {
 		out1 = new Gpio(outNumber1, 'out');
 		out2 = new Gpio(outNumber2, 'out');
 	} catch (err) {
+		console.log(err)
 		console.log('Error -> GPIO is not detected!!!');
 	}
 
