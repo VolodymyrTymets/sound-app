@@ -1,0 +1,17 @@
+{
+  "name": "rectangle-generator-thread-worker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "lodash": "^4.17.10",
+    "onoff": "^3.2.1",
+    "sleep": "^5.2.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
