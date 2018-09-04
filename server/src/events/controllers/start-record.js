@@ -26,7 +26,7 @@ const startRecord = (client, config) => ({ settings }) => {
 	const recordTine = new Date();
 	const segmenter = new Segmenter(recordTine, config, settings);
 
-	rectangleGeneratorThreadWorker.start(1);
+	rectangleGeneratorThreadWorker.start(450);
 	mic.start(recordTine, (audioData, buffer) => {
 		const wave = audioData.channelData[0];
 		waves.push(wave);
@@ -40,7 +40,7 @@ const startRecord = (client, config) => ({ settings }) => {
 	});
 
 	segmenter.on('segment', (segment,  average, buffer) => {
-		const segmentToClient = skipArrayElements(segment);
+		// const segmentToClient = skipArrayElements(segment);
     const minEnergy = settings.minEnergy && parseFloat(settings.minEnergy);
 		fftThreadWorker.start(segment, minEnergy, (response) => {
 			const { spectrum, energy, similarity, tissueType } = response;
@@ -54,7 +54,7 @@ const startRecord = (client, config) => ({ settings }) => {
 				tissueType,
 				spectrum,
 				similarity,
-				segment: segmentToClient,
+				segment:  [] //segmentToClient,
 			});
 		});
 	});
