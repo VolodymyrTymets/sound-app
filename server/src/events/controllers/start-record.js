@@ -2,8 +2,9 @@ const _ = require('lodash');
 const { mic_data, find_segment, recording } = require('../event-names');
 const { Mic } = require('../../utils/Mic');
 const { Segmenter } = require('../../utils/segmenter');
-const { fftThreadWorker } = require('../../utils/FFT');
+const { getSpectrumInfo } = require('../../utils/fft/getSpectrumInfo');
 const { notify } = require('../../utils/notifier');
+const { rectangleGeneratorThreadWorker } = require('../../utils/RectangleGenertor');
 
 const skipArrayElements = (array, step = 4) => {
 	const res = [];
@@ -25,7 +26,7 @@ const startRecord = (client, config) => ({ settings }) => {
 	const recordTine = new Date();
 	const segmenter = new Segmenter(recordTine, config, settings);
 
-
+	rectangleGeneratorThreadWorker.start(450);
 	mic.start(recordTine, (audioData, buffer) => {
 		const wave = audioData.channelData[0];
 		waves.push(wave);
@@ -41,21 +42,35 @@ const startRecord = (client, config) => ({ settings }) => {
 	segmenter.on('segment', (segment,  average, buffer) => {
 		const segmentToClient = skipArrayElements(segment);
     const minEnergy = settings.minEnergy && parseFloat(settings.minEnergy);
-		fftThreadWorker.start(segment, minEnergy, (response) => {
-			const { spectrum, energy, similarity, tissueType } = response;
-			if(tissueType) {
-				segmenter.saveTissue(buffer, tissueType);
-				notify(config.assetsPath);
-			}
-			client.emit(find_segment, {
-				average,
-				energy,
-				tissueType,
-				spectrum,
-				similarity,
-				segment: segmentToClient,
-			});
-		});
+
+    const { spectrum, energy, similarity, tissueType }  = getSpectrumInfo(segment, minEnergy);
+    if(tissueType) {
+      segmenter.saveTissue(buffer, tissueType);
+      notify(config.assetsPath);
+    }
+    client.emit(find_segment, {
+      average,
+      energy,
+      tissueType,
+      spectrum,
+      similarity,
+      segment: segmentToClient,
+    });
+		// fftThreadWorker.start(segment, minEnergy, (response) => {
+		// 	const { spectrum, energy, similarity, tissueType } = response;
+		// 	if(tissueType) {
+		// 		segmenter.saveTissue(buffer, tissueType);
+		// 		notify(config.assetsPath);
+		// 	}
+		// 	client.emit(find_segment, {
+		// 		average,
+		// 		energy,
+		// 		tissueType,
+		// 		spectrum,
+		// 		similarity,
+		// 		segment:  [] //segmentToClient,
+		// 	});
+		// });
 	});
 };
 
