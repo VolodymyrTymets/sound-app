@@ -1,4 +1,5 @@
 const spawn = require('threads').spawn;
+const config = require('../config/config.prod');
 
 class ServerThreadWorker {
   constructor() {
@@ -11,13 +12,17 @@ class ServerThreadWorker {
     console.log(`-> [ServerThreadWorker]: ${message.message || message}`)
   }
 
-  start() {
+  start(callback) {
     this._thread = spawn(function (input, done) {
       const { startServer } = require('server');
-      const { port } = input;
-      startServer(port, done);
+      const { port, config } = input;
+      startServer(port, config, done);
     })
-      .send({ port: process.env.PORT })
+			.on('message', ({ message }) => {
+				this.log(message);
+				callback();
+			})
+      .send({ port: process.env.PORT, config })
       .on('error', this.log)
       .on('exit', () => this.log('stopped!'));
   }

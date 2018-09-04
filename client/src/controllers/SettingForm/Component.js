@@ -27,12 +27,21 @@ const Segments = ({ onChange, onTestSoundClick, settings }) => (
         <MenuItem value="plughw:2" primaryText="plughw:2" />
 			</SelectField>
 		</div>
-		<div className="col-md-6 col-lg-6">
+		<div className="col-md-3 col-lg-3">
 			<TextField
 				fullWidth
 				floatingLabelText="Середня довжина сегмента"
-				onChange={onChange('segmentationValue')}
-				defaultValue={settings.segmentationValue}
+				onChange={onChange('meanSegmentLength')}
+				defaultValue={settings.meanSegmentLength}
+			/><br />
+
+		</div>
+		<div className="col-md-3 col-lg-3">
+			<TextField
+				fullWidth
+				floatingLabelText="Час прослуховування (2000 мс = 2с)"
+				onChange={onChange('minSegmentTimeToListen')}
+				defaultValue={settings.minSegmentTimeToListen}
 			/><br />
 
 		</div>
