@@ -9,11 +9,11 @@ const getSpectrumInfo = (wave, minEnergy, done) => {
 
 	// to pass for client only 40 point of spectrum;
 	const { splicedSpectrum, maxIndex } = spliceSpectrum(spectrum);
-	const similarity = getSimilarity(config.meanSpectrum, splicedSpectrum, x => x.amplitude);
+	// const similarity = getSimilarity(config.meanSpectrum, splicedSpectrum, x => x.amplitude);
 	const energy = getSpectrumEnergy(spectrum, maxIndex, 10);
 	const tissueType = getTissueType(spectrum, energy, minEnergy);
 
-	done({ energy, spectrum: splicedSpectrum, similarity, tissueType });
+	done({ energy, spectrum: splicedSpectrum, similarity: 0, tissueType });
 };
 
 module.exports = { getSpectrumInfo, config };

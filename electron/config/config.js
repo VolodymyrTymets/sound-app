@@ -10,7 +10,7 @@ module.exports = {
     fileType: 'wav',
   },
   storeFolderName: 'Sound-app',
-	assetsPath: path.resolve(__dirname, '../',  './server/private/assets'),
+	assetsPath: path.resolve(__dirname, '../',  './server/public/assets'),
   minSegmentLength: 5, // 500 ms,
 	minSegmentTimeToListen: 2000, // 500 ms
 };

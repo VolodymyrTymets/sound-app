@@ -5,12 +5,8 @@ const api = require('./src/api');
 const createApp = (config) => {
 	const app = express();
 
-
-	console.log('assetsPath ->', config.assetsPath)
-	app.use(express.static(path.join(__dirname, 'assets')));
-
 	app.use(express.static(path.resolve(__dirname, './public/build/')));
-
+	app.use(express.static(path.resolve(__dirname, './public/assets/')));
 
   // api routes v1
 	app.use('/api/v1', api(config));
