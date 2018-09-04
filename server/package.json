@@ -20,7 +20,7 @@
     "moment": "^2.22.2",
     "morgan": "~1.9.0",
     "play-sound": "^1.1.2",
-    "rectangle-generator-thread-worker": "file:src/modules/rectangle-generator-thread-worker",
+    "rectangle-generator-thread-worker": "file:./src/modules/rectangle-generator-thread-worker",
     "serve-favicon": "~2.4.5",
     "socket.io": "^2.0.4",
     "threads": "^0.12.0",
