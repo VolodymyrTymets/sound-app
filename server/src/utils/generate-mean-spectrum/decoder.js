@@ -4,10 +4,9 @@ const { range } = require('lodash');
 const jsonfile = require('jsonfile');
 const path = require('path');
 
-const { fft, spliceSpectrum } = require('../utils/fft');
-const { getSpectrumEnergy } = require('../utils/get-spectrum-energy');
-const { config } = require('../../config');
-
+const { fft, spliceSpectrum } = require('../fft/utils/fft');
+const { getSpectrumEnergy } = require('../fft/utils/get-spectrum-energy');
+const { config } = require('../fft/config');
 
 const decode = filePath => {
 	const readFile = filepath => {

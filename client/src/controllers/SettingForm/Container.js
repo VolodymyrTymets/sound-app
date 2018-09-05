@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, lifecycle } from 'recompose';
 import Component from './Component';
 import { changeSettingsValue } from './redux/actions';
 import { notify } from '../../utils/notifier';
 
 import socket from '../../utils/socket';
 import list from '../../utils/event-names';
+import axios from "axios/index";
 
 const enhance = compose(
 	connect(state => ({
@@ -19,6 +20,15 @@ const enhance = compose(
 			notify();
 		}
 	}),
+	lifecycle({
+		componentDidMount() {
+      axios.get('/api/v1/mean-spectrum')
+        .then(({ data }) => {
+          const { meanEnergy } = data;
+          this.props.changeSettingsValue('minEnergy', meanEnergy);
+        });
+		}
+	})
 );
 
 export default enhance(Component);

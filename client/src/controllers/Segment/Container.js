@@ -24,8 +24,8 @@ const enhance = compose(
 			},
 			axisY: {
 				includeZero: false,
-				minimum: -1,
-				maximum: 1,
+				minimum: -0.5,
+				maximum: 0.5,
 			},
 			data: [{
 				type: 'line',
@@ -70,14 +70,14 @@ const enhance = compose(
 				this.props.setTissueType(tissueType);
 				setTimeout(() => this.props.setTissueType(''), 500);
 			});
+      axios.get('/api/v1/mean-spectrum')
+        .then(({ data }) => {
+          const { meanEnergy, meanSpectrum } = data;
+          this.props.setMeanEnergy(meanEnergy);
+          spectrumChart.options.data[1].dataPoints = spectrumToPoints(meanSpectrum);
+          spectrumChart.render();
+        });
 
-			axios.get('/api/v1/mean-spectrum')
-				.then(({ data }) => {
-					const { meanEnergy, meanSpectrum } = data;
-					this.props.setMeanEnergy(meanEnergy);
-					spectrumChart.options.data[1].dataPoints = spectrumToPoints(meanSpectrum);
-					spectrumChart.render();
-				});
 		},
 	}),
 );

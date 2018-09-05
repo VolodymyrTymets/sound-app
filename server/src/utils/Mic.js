@@ -41,7 +41,7 @@ class Mic {
 			this._createInstance();
 			this._micInputStream.on('data', buffer => {
 				WavDecoder.decode(Buffer.concat([header(this._config .mic.rate), buffer]))
-					.then(audioData => onData(audioData, buffer))
+					.then(audioData => onData(audioData))
 					.catch(this._catch);
 			});
 
