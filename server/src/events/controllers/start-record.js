@@ -45,7 +45,7 @@ const startRecord = (client, config) => ({ settings }) => {
 
     const { spectrum, energy, similarity, tissueType }  = getSpectrumInfo(segment, minEnergy);
     if(tissueType) {
-      segmenter.saveTissue(buffer, tissueType);
+      // segmenter.saveTissue(buffer, tissueType);
       notify(config.assetsPath);
     }
     client.emit(find_segment, {
