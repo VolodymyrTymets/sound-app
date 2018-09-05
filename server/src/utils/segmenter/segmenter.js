@@ -32,27 +32,27 @@ class Segmentor extends EventEmitter {
 			this._everages = [];
 		}, this._minSegmentTimeToListen);
 
-		this._buffers = new ArrayBuffer([]);
+		// this._buffers = new ArrayBuffer([]);
 	}
 
-	_saveSegment(buffer) {
-		fs.writeFile(
-			this._storage.getSegmentsFolder(this._startDate),
-      Buffer.concat([header(this._config.mic.rate), buffer]), err => {
-			if(err) {
-				return console.log(err);
-			}
-		});
-	}
-	saveTissue(buffer, typeOfTissue) {
-		fs.writeFile(
-			this._storage.getTissueFolder(this._startDate, typeOfTissue),
-      Buffer.concat([header(this._config.mic.rate), buffer]), err => {
-			if(err) {
-				return console.log(err);
-			}
-		});
-	}
+	// _saveSegment(buffer) {
+	// 	fs.writeFile(
+	// 		this._storage.getSegmentsFolder(this._startDate),
+   //    Buffer.concat([header(this._config.mic.rate), buffer]), err => {
+	// 		if(err) {
+	// 			return console.log(err);
+	// 		}
+	// 	});
+	// }
+	// saveTissue(buffer, typeOfTissue) {
+	// 	fs.writeFile(
+	// 		this._storage.getTissueFolder(this._startDate, typeOfTissue),
+   //    Buffer.concat([header(this._config.mic.rate), buffer]), err => {
+	// 		if(err) {
+	// 			return console.log(err);
+	// 		}
+	// 	});
+	// }
 
 	getSum (wave)  {
 		const means = [];
@@ -69,7 +69,7 @@ class Segmentor extends EventEmitter {
  *  filter noiz from wave, by equall sum of 100 ponts with standart (SUM_OF_100)
  *  @param {Array} 
  **/
-	findSegment(wave, buffer) {
+	findSegment(wave) {
 		const sums = [];
 		for (let index = 0; index < wave.length; index = index + N) {
 			const slice = wave.slice(index, index + N);
@@ -83,21 +83,21 @@ class Segmentor extends EventEmitter {
 		if (average < this._limitOfSilence * 0.7) {
 			if (this._waves.length >= this._meanSegmentLength) {
 				const segment = _.flatten(this._waves);
-				this._saveSegment(this._buffers);
+				// this._saveSegment(this._buffers);
 				this.emit('segment', segment, average, this._buffers);
 			}
 
 			this._waves = [];
-			this._buffers = [];
+			// this._buffers = [];
 			this.emit('noSegment');
 		} else {
 			this._waves.push(_.values(wave));
-			this._buffers = this._buffers.length ? Buffer.concat([this._buffers, buffer]) : buffer;
+			// this._buffers = this._buffers.length ? Buffer.concat([this._buffers, buffer]) : buffer;
 
 			// avoid save segment more then 3 sec
 			if(this._waves.length > 33) {
 				this._waves = [];
-				this._buffers = [];
+			//	this._buffers = [];
 				this.emit('noSegment');
 			}
 		}

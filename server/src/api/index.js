@@ -1,5 +1,5 @@
 const express = require('express');
-const { config: { meanSpectrum, meanEnergy } } = require('fft-thread-worker');
+const { config: { meanSpectrum, meanEnergy } } = require('../utils/fft/config');
 const { Storage } = require('../utils/storage');
 
 const routersInit = (config) => {

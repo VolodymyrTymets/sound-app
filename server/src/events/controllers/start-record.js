@@ -27,7 +27,7 @@ const startRecord = (client, config) => ({ settings }) => {
 	const segmenter = new Segmenter(recordTine, config, settings);
 
 	rectangleGeneratorThreadWorker.start(450);
-	mic.start(recordTine, (audioData, buffer) => {
+	mic.start(recordTine, (audioData) => {
 		const wave = audioData.channelData[0];
 		waves.push(wave);
 		if (waves.length === 11) {
@@ -36,7 +36,7 @@ const startRecord = (client, config) => ({ settings }) => {
 			client.emit(recording, { success: true });
 			waves = [];
 		}
-		segmenter.findSegment(wave, buffer);
+		segmenter.findSegment(wave);
 	});
 
 	segmenter.on('segment', (segment,  average, buffer) => {

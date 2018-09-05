@@ -50,7 +50,7 @@ const Segments = ({ onChange, onTestSoundClick, settings }) => (
 				fullWidth
 				floatingLabelText="Енергія +"
 				onChange={onChange('minEnergy')}
-				defaultValue={settings.minEnergy}
+				value={settings.minEnergy}
 			/><br />
 		</div>
 		<div className="col-md-3 col-lg-3">
