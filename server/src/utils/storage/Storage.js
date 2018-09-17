@@ -7,7 +7,7 @@ class Storage {
 	constructor(config) {
 		this._appName = config.storeFolderName;
 		this._dateFormat = 'DD-MM-YYYY';
-		this._minuteFormat = 'HH:mm:ss';
+		this._minuteFormat = 'HH-mm-ss';
 	}
 
 	getPath() {
@@ -19,11 +19,11 @@ class Storage {
 		if (!fs.existsSync(folderPath)){
 			fs.mkdirSync(folderPath);
 		}
-		const dateFolder = path.resolve(folderPath, moment(startRecordDate).format(this._dateFormat));
+		const dateFolder = path.resolve(folderPath, `date_${moment(startRecordDate).format(this._dateFormat)}`);
 		if (!fs.existsSync(dateFolder)){
 			fs.mkdirSync(dateFolder);
 		}
-		const minuteFolder = path.resolve(dateFolder, moment(startRecordDate).format(this._minuteFormat));
+		const minuteFolder = path.resolve(dateFolder, `time_${moment(startRecordDate).format(this._minuteFormat)}`);
 		if (!fs.existsSync(minuteFolder)){
 			fs.mkdirSync(minuteFolder);
 		}
