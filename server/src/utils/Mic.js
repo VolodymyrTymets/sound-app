@@ -5,6 +5,7 @@ const WavDecoder = require('wav-decoder');
 const header = require('waveheader');
 const fs = require('fs');
 const path = require('path');
+const { exec } = require('child_process');
 const { Storage } = require('../utils/storage');
 
 class Mic {
@@ -16,6 +17,7 @@ class Mic {
 		this._config = config;
 		this._storage = new Storage(config);
 		this._startDate =  null;
+    this._tissueTimes = [];
 
 	}
 	_writeIntoFile(startDate) {
@@ -32,7 +34,7 @@ class Mic {
 		}));
 		this._micInputStream = this._micInstance.getAudioStream();
 		this._micInputStream.on('error', this.log);
-		this._tissueTimes = [];
+
 	}
 	log(message) {
 		console.log(`-> [Mic]: ${message.message || message}`);
@@ -41,6 +43,7 @@ class Mic {
 		}
 	}
 	saveTissueTime(tissueType) {
+		console.log('tissueType ->', tissueType)
 		this._tissueTimes.push({ time: new Date(), type: tissueType });
 	}
 	start(startDate, onData) {
@@ -63,15 +66,19 @@ class Mic {
 	stop() {
     this._micInstance && this._micInstance.stop();
     try {
-			const folderName = path.resolve(this._storage.getFolderName(this._startDate), this._FILE_NAME);
+			const folderName = path.resolve(this._storage.getFolderName(this._startDate));
 			const trackPath = path.resolve(folderName, this._FILE_NAME);
 
 			this._tissueTimes.forEach(t => {
 				const duration = moment.duration(moment(t.time).diff(this._startDate));
-				const from = duration.seconds();
-				const to = from - 2 || 0;
-				const out = path.resolve(folderName, t.type);
-				const pieceName = `${duration.hours()} h ${duration.minutes()} m ${duration.seconds()} s`;
+				const to = duration.seconds();
+				const from = to - 3 || 0;
+				const out = path.resolve(folderName, `./${t.type}`);
+				console.log('out ->', out)
+        if(!fs.existsSync(out)) {
+        	fs.mkdirSync(out)
+				}
+				const pieceName = `${duration.hours()}h-${duration.minutes()}m-${duration.seconds()}s.wav`;
         const piecePath = path.resolve(out, pieceName);
         console.log('piecePath ->', piecePath);
 
