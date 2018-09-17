@@ -63,7 +63,7 @@ class Segmentor extends EventEmitter {
 			means.push(mean);
 		}
 		return _.min(_.flatten(means));
-	}  
+	}
 
 	/**
  *  filter noiz from wave, by equall sum of 100 ponts with standart (SUM_OF_100)
