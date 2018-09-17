@@ -63,7 +63,7 @@ class Segmentor extends EventEmitter {
 			means.push(mean);
 		}
 		return _.min(_.flatten(means));
-	}  
+	}
 
 	/**
  *  filter noiz from wave, by equall sum of 100 ponts with standart (SUM_OF_100)
@@ -83,7 +83,7 @@ class Segmentor extends EventEmitter {
 		if (average < this._limitOfSilence * 0.7) {
 			if (this._waves.length >= this._meanSegmentLength) {
 				const segment = _.flatten(this._waves);
-				this._saveSegment(this._buffers);
+				// this._saveSegment(this._buffers);
 				this.emit('segment', segment, average, this._buffers);
 			}
 

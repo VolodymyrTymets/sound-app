@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const moment = require('moment');
 const mic = require('mic');
 const WavDecoder = require('wav-decoder');
 const header = require('waveheader');
@@ -14,6 +15,8 @@ class Mic {
 		this._micDevice = setting && setting.mic;
 		this._config = config;
 		this._storage = new Storage(config);
+		this._startDate =  null;
+
 	}
 	_writeIntoFile(startDate) {
 		const outputFileStream = fs.WriteStream(path.resolve(this._storage.getFolderName(startDate), this._FILE_NAME));
@@ -29,6 +32,7 @@ class Mic {
 		}));
 		this._micInputStream = this._micInstance.getAudioStream();
 		this._micInputStream.on('error', this.log);
+		this._tissueTimes = [];
 	}
 	log(message) {
 		console.log(`-> [Mic]: ${message.message || message}`);
@@ -36,8 +40,12 @@ class Mic {
 			console.log(message);
 		}
 	}
+	saveTissueTime(tissueType) {
+		this._tissueTimes.push({ time: new Date(), type: tissueType });
+	}
 	start(startDate, onData) {
 		try {
+			this._startDate = startDate;
 			this._createInstance();
 			this._micInputStream.on('data', buffer => {
 				WavDecoder.decode(Buffer.concat([header(this._config .mic.rate), buffer]))
@@ -54,6 +62,34 @@ class Mic {
 	}
 	stop() {
     this._micInstance && this._micInstance.stop();
+    try {
+			const folderName = path.resolve(this._storage.getFolderName(this._startDate), this._FILE_NAME);
+			const trackPath = path.resolve(folderName, this._FILE_NAME);
+
+			this._tissueTimes.forEach(t => {
+				const duration = moment.duration(moment(t.time).diff(this._startDate));
+				const from = duration.seconds();
+				const to = from - 2 || 0;
+				const out = path.resolve(folderName, t.type);
+				const pieceName = `${duration.hours()} h ${duration.minutes()} m ${duration.seconds()} s`;
+        const piecePath = path.resolve(out, pieceName);
+        console.log('piecePath ->', piecePath);
+
+				exec(`ffmpeg -i ${trackPath} -ss ${from} -to ${to} -c copy ${piecePath}`, (error) => {
+					if (error) {
+						console.error(`exec error: ${error}`);
+						return;
+					}
+				});
+			});
+
+		} catch (e) {
+			console.log('Parse track error:');
+			console.log(e);
+		}
+		this._startDate == null;
+		this._tissueTimes = [];
+		this._micInstance && this._micInstance.stop();
 	}
 }
 
