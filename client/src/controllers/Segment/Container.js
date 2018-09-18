@@ -10,7 +10,7 @@ import Component from './Component';
 import CanvasJS from '../../utils/canvasjs.min';
 
 const segmentToPoints = segment => segment.map((value, index) => ({ y: value || 0, x: index }));
-const spectrumToPoints = spectrum => spectrum.map(({ amplitude }, i) => ({ y: amplitude || 0, x: i }));
+const spectrumToPoints = spectrum => spectrum.map((s, i) => ({ y: s.amplitude || s || 0, x: i }));
 
 const enhance = compose(
 	connect(state => ({
@@ -46,6 +46,9 @@ const enhance = compose(
 			}, {
 				type: 'line',
 				dataPoints: [],
+			}, {
+				type: 'line',
+				dataPoints: [],
 			}],
 		}),
 	}),
@@ -56,15 +59,18 @@ const enhance = compose(
 			segmentChart.render();
 			spectrumChart.render();
 
-			socket.on(list.find_segment, ({ segment, spectrum, average, energy, tissueType }) => {
+			socket.on(list.find_segment, ({ segment, spectrum, average, energy, tissueType, test }) => {
 				segmentChart.options.data[0].dataPoints = segmentToPoints(segment);
 				spectrumChart.options.data[0].dataPoints = spectrumToPoints(spectrum);
+				// spectrumChart.options.data[2].dataPoints = spectrumToPoints(test.spectrum);
 				segmentChart.render();
 				spectrumChart.render();
 
 				if(tissueType === 'nerve') {
 					notify()
 				}
+
+				// console.log(`energy -> [${energy}]:[${test.energy}] <- test energy`);
 
 				this.props.addSegment(average, energy);
 				this.props.setTissueType(tissueType);

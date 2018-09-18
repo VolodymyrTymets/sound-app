@@ -44,7 +44,7 @@ const startRecord = (client, config) => ({ settings }) => {
 		const segmentToClient = skipArrayElements(segment);
     const minEnergy = settings.minEnergy && parseFloat(settings.minEnergy);
 
-    const { spectrum, energy, similarity, tissueType }  = getSpectrumInfo(segment, minEnergy);
+    const { spectrum, energy, tissueType, test }  = getSpectrumInfo(segment, minEnergy);
     if(tissueType) {
 			mic.saveTissueTime(tissueType);
       notify(config.assetsPath);
@@ -54,8 +54,8 @@ const startRecord = (client, config) => ({ settings }) => {
       energy,
       tissueType,
       spectrum,
-      similarity,
       segment: segmentToClient,
+			test: test,
     });
 		// fftThreadWorker.start(segment, minEnergy, (response) => {
 		// 	const { spectrum, energy, similarity, tissueType } = response;
