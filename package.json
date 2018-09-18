@@ -4,7 +4,6 @@
   "description": "socet-sound-app",
   "main": "index.js",
   "dependencies": {
-    "fourier-transform": "^1.1.2",
     "jsonfile": "^4.0.0"
   },
   "devDependencies": {
