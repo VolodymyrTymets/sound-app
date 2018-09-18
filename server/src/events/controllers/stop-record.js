@@ -1,5 +1,8 @@
+const mic = require('../../utils/Mic');
+const { rectangleGeneratorThreadWorker } = require('../../utils/RectangleGenertor');
+
 const stopRecord = () => () => {
-	console.log('---> stop-record');
+	rectangleGeneratorThreadWorker.stop();
   global.mic && global.mic.stop();
 };
 

@@ -32,8 +32,8 @@ const startRecord = (client, config) => ({ settings }) => {
 		const wave = audioData.channelData[0];
 		waves.push(wave);
 		if (waves.length === 11) {
-			const waveToClient = _.flatten(waves.map(w => skipArrayElements(w)));
-			client.emit(mic_data, waveToClient);
+			// const waveToClient = _.flatten(waves.map(w => skipArrayElements(w)));
+			// client.emit(mic_data, waveToClient);
 			client.emit(recording, { success: true });
 			waves = [];
 		}
@@ -41,7 +41,7 @@ const startRecord = (client, config) => ({ settings }) => {
 	});
 
 	segmenter.on('segment', (segment,  average) => {
-		const segmentToClient = skipArrayElements(segment);
+		// const segmentToClient = skipArrayElements(segment);
     const minEnergy = settings.minEnergy && parseFloat(settings.minEnergy);
 
     const { spectrum, energy, tissueType, test }  = getSpectrumInfo(segment, minEnergy);
@@ -54,7 +54,7 @@ const startRecord = (client, config) => ({ settings }) => {
       energy,
       tissueType,
       spectrum,
-      segment: segmentToClient,
+      segment: [], // segmentToClient,
 			test: test,
     });
 		// fftThreadWorker.start(segment, minEnergy, (response) => {
