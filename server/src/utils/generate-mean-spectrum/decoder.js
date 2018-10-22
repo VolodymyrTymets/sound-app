@@ -1,6 +1,7 @@
 const fs = require('fs');
 const WavDecoder = require('wav-decoder');
-const { range } = require('lodash');
+const Json2csvParser = require('json2csv').Parser;
+const { range, extend } = require('lodash');
 const jsonfile = require('jsonfile');
 const path = require('path');
 
@@ -28,7 +29,7 @@ const decode = filePath => {
 const decodeSingleIn = async (folderPath, fileName) => {
 	const inFilePath = path.resolve(folderPath,  fileName);
 	const outFilePath = path.resolve(folderPath, '../out', `${fileName}.json`);
-
+  const outFilePathCSV = path.resolve(folderPath, '../out', `${fileName}.csv`);
 	const audioData = await decode(inFilePath);
 
 	const wave = audioData.channelData[0];
@@ -43,6 +44,11 @@ const decodeSingleIn = async (folderPath, fileName) => {
 	const energy = getSpectrumEnergy(spectrum, maxIndex, 10);
 	console.log('energy ->', energy)
 	jsonfile.writeFileSync(outFilePath, { energy, meanSpectrum: res});
+
+	// write csv
+	const parser = new Json2csvParser({ fields: ['frequency', 'amplitude', 'energy'] });
+  const csv = parser.parse(res.map(r => extend(r,  { energy })));
+  fs.writeFileSync(outFilePathCSV, csv,  { encoding: 'utf8' })
 };
 
 
