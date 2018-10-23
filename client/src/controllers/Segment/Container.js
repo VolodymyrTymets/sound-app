@@ -24,8 +24,8 @@ const enhance = compose(
 			},
 			axisY: {
 				includeZero: false,
-				minimum: -0.5,
-				maximum: 0.5,
+				minimum: -1,
+				maximum: 1,
 			},
 			data: [{
 				type: 'line',
@@ -54,23 +54,25 @@ const enhance = compose(
 	}),
 	lifecycle({
 		componentDidMount() {
-			const segmentChart = this.props.getSegmentChart();
+
 			const spectrumChart = this.props.getSpectrumChart();
-			segmentChart.render();
+      const segmentChart = this.props.getSegmentChart();
 			spectrumChart.render();
 
-			socket.on(list.find_segment, ({ segment, spectrum, average, energy, tissueType, test }) => {
-				segmentChart.options.data[0].dataPoints = segmentToPoints(segment);
+
+			segmentChart.render();
+
+			socket.on(list.find_segment, ({ segment, spectrum, average, energy, tissueType }) => {
+
 				spectrumChart.options.data[0].dataPoints = spectrumToPoints(spectrum);
-				// spectrumChart.options.data[2].dataPoints = spectrumToPoints(test.spectrum);
-				segmentChart.render();
 				spectrumChart.render();
+
+				segmentChart.options.data[0].dataPoints = segmentToPoints(segment);
+				segmentChart.render();
 
 				if(tissueType === 'nerve') {
 					notify()
 				}
-
-				// console.log(`energy -> [${energy}]:[${test.energy}] <- test energy`);
 
 				this.props.addSegment(average, energy);
 				this.props.setTissueType(tissueType);
@@ -83,7 +85,6 @@ const enhance = compose(
           spectrumChart.options.data[1].dataPoints = spectrumToPoints(meanSpectrum);
           spectrumChart.render();
         });
-
 		},
 	}),
 );
