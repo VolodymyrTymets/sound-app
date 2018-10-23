@@ -13,7 +13,7 @@ const getIndexOfMax = spectrum => {
 	return maxIndex;
 };
 
-const getSpectrumEnergyTest= (spectrum, maxIndex, l) => {
+const getSpectrumEnergy= (spectrum, maxIndex, l) => {
 	const indexOfMax = maxIndex || getIndexOfMax(spectrum);
 	// build arra to calculate energy +-l from max amplitude
 	const toCalculation = [];
@@ -42,4 +42,4 @@ const getSpectrumEnergyTest= (spectrum, maxIndex, l) => {
 	return Math.abs(sum(squeres));
 };
 
-module.exports = { getSpectrumEnergyTest };
+module.exports = { getSpectrumEnergy };

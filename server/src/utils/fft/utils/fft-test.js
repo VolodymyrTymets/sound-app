@@ -1,12 +1,12 @@
 const { max, indexOf, values } = require('lodash');
-const fft = require('fourier-transform');
+const fftLib = require('fourier-transform');
 const { config } = require('../config');
 
 function nearestPow2( aSize ){
 	return Math.pow( 2, Math.round( Math.log( aSize ) / Math.log( 2 ) ) );
 }
 
-const spliceSpectrumTest = (spectrum) => {
+const spliceSpectrum = (spectrum) => {
 	const maxSpectrum = max(spectrum);
 	const maxIndex = indexOf(spectrum, maxSpectrum);
 	const from = maxIndex - (config.N / 2) || 0;
@@ -17,7 +17,7 @@ const spliceSpectrumTest = (spectrum) => {
 };
 
 
-const fftTest = (wave) => {
+const fft = (wave) => {
 	let waveLength = wave.length;
 	let index = nearestPow2(waveLength);
 
@@ -27,8 +27,8 @@ const fftTest = (wave) => {
 	}
 
 	const cutedWave = wave.slice(0, index);
-	const spectrum = fft(cutedWave);
+	const spectrum = fftLib(cutedWave);
 	return { wave: values(cutedWave), spectrum };
 };
 
-module.exports = { fftTest, spliceSpectrumTest };
+module.exports = { fft, spliceSpectrum };
