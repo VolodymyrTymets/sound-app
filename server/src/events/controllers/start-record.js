@@ -14,6 +14,8 @@ const skipArrayElements = (array, step = 4) => {
 	return res;
 };
 
+const isForRaspi = process.env.TARGET === 'raspi';
+
 const startRecord = (client, config) => ({ settings }) => {
 	console.log({ settings });
 	const mic = new Mic(settings, config);
@@ -27,26 +29,28 @@ const startRecord = (client, config) => ({ settings }) => {
 	const segmenter = new Segmenter(recordTine, config, settings);
 
 	// todo:uncomment  rectangleGeneratorThreadWorker when will be tested
-	// rectangleGeneratorThreadWorker.start(450);
+	if(!isForRaspi) {
+    rectangleGeneratorThreadWorker.start(450);
+  }
 	mic.start(recordTine, (audioData, buffer) => {
 		const wave = audioData.channelData[0];
 		waves.push(wave);
 		if (waves.length === 11) {
-			const waveToClient = _.flatten(waves.map(w => skipArrayElements(w)));
-			client.emit(mic_data, waveToClient);
+			if(isForRaspi) {
+        const waveToClient = _.flatten(waves.map(w => skipArrayElements(w)));
+        client.emit(mic_data, waveToClient);
+      }
 			client.emit(recording, { success: true });
 			waves = [];
 		}
-		segmenter.findSegment(wave, buffer);
+		segmenter.findSegment(wave);
 	});
 
-	segmenter.on('segment', (segment,  average, buffer) => {
-		const segmentToClient = skipArrayElements(segment);
+	segmenter.on('segment', (segment,  average) => {
     const minEnergy = settings.minEnergy && parseFloat(settings.minEnergy);
 
-    const { spectrum, energy, similarity, tissueType }  = getSpectrumInfo(segment, minEnergy);
+    const { spectrum, energy, tissueType, test }  = getSpectrumInfo(segment, minEnergy);
     if(tissueType) {
-      // segmenter.saveTissue(buffer, tissueType);
 			mic.saveTissueTime(tissueType);
       notify(config.assetsPath);
     }
@@ -55,24 +59,9 @@ const startRecord = (client, config) => ({ settings }) => {
       energy,
       tissueType,
       spectrum,
-      similarity,
-      segment: segmentToClient,
+      segment: isForRaspi ? [] : skipArrayElements(segment),
+			test: test,
     });
-		// fftThreadWorker.start(segment, minEnergy, (response) => {
-		// 	const { spectrum, energy, similarity, tissueType } = response;
-		// 	if(tissueType) {
-		// 		segmenter.saveTissue(buffer, tissueType);
-		// 		notify(config.assetsPath);
-		// 	}
-		// 	client.emit(find_segment, {
-		// 		average,
-		// 		energy,
-		// 		tissueType,
-		// 		spectrum,
-		// 		similarity,
-		// 		segment:  [] //segmentToClient,
-		// 	});
-		// });
 	});
 };
 

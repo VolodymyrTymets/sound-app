@@ -10,7 +10,7 @@ import Component from './Component';
 import CanvasJS from '../../utils/canvasjs.min';
 
 const segmentToPoints = segment => segment.map((value, index) => ({ y: value || 0, x: index }));
-const spectrumToPoints = spectrum => spectrum.map(({ amplitude }, i) => ({ y: amplitude || 0, x: i }));
+const spectrumToPoints = spectrum => spectrum.map((s, i) => ({ y: s.amplitude || s || 0, x: i }));
 
 const enhance = compose(
 	connect(state => ({
@@ -46,21 +46,29 @@ const enhance = compose(
 			}, {
 				type: 'line',
 				dataPoints: [],
+			}, {
+				type: 'line',
+				dataPoints: [],
 			}],
 		}),
 	}),
 	lifecycle({
 		componentDidMount() {
-			const segmentChart = this.props.getSegmentChart();
+
 			const spectrumChart = this.props.getSpectrumChart();
-			segmentChart.render();
+      const segmentChart = this.props.getSegmentChart();
 			spectrumChart.render();
 
+
+			segmentChart.render();
+
 			socket.on(list.find_segment, ({ segment, spectrum, average, energy, tissueType }) => {
-				segmentChart.options.data[0].dataPoints = segmentToPoints(segment);
+
 				spectrumChart.options.data[0].dataPoints = spectrumToPoints(spectrum);
-				segmentChart.render();
 				spectrumChart.render();
+
+				segmentChart.options.data[0].dataPoints = segmentToPoints(segment);
+				segmentChart.render();
 
 				if(tissueType === 'nerve') {
 					notify()
@@ -70,14 +78,13 @@ const enhance = compose(
 				this.props.setTissueType(tissueType);
 				setTimeout(() => this.props.setTissueType(''), 500);
 			});
-
-			axios.get('/api/v1/mean-spectrum')
-				.then(({ data }) => {
-					const { meanEnergy, meanSpectrum } = data;
-					this.props.setMeanEnergy(meanEnergy);
-					spectrumChart.options.data[1].dataPoints = spectrumToPoints(meanSpectrum);
-					spectrumChart.render();
-				});
+      axios.get('/api/v1/mean-spectrum')
+        .then(({ data }) => {
+          const { meanEnergy, meanSpectrum } = data;
+          this.props.setMeanEnergy(meanEnergy);
+          spectrumChart.options.data[1].dataPoints = spectrumToPoints(meanSpectrum);
+          spectrumChart.render();
+        });
 		},
 	}),
 );

@@ -1,19 +1,19 @@
 const { sum } = require('lodash');
 
 const getIndexOfMax = spectrum => {
-	let max = spectrum[0].amplitude;
+	let max = spectrum[0];
 	let maxIndex = 0;
 
 	for (var i = 1; i < spectrum.length; i++) {
-		if (spectrum[i].amplitude > max) {
+		if (spectrum[i] > max) {
 			maxIndex = i;
-			max = spectrum[i].amplitude;
+			max = spectrum[i];
 		}
 	}
 	return maxIndex;
 };
 
-const getSpectrumEnergy = (spectrum, maxIndex, l) => {
+const getSpectrumEnergy= (spectrum, maxIndex, l) => {
 	const indexOfMax = maxIndex || getIndexOfMax(spectrum);
 	// build arra to calculate energy +-l from max amplitude
 	const toCalculation = [];
@@ -21,25 +21,25 @@ const getSpectrumEnergy = (spectrum, maxIndex, l) => {
 	do {
 		toCalculation.push(spectrum[leftIndex]);
 		leftIndex--;
-	} while (spectrum[leftIndex] && (spectrum[leftIndex].frequency > spectrum[indexOfMax].frequency - l));
+	} while (leftIndex && (leftIndex > indexOfMax - l));
 	toCalculation.reverse();
 
 	let rightIndex = indexOfMax + 1;
 	do {
 		toCalculation.push(spectrum[rightIndex]);
 		rightIndex++;
-	} while (spectrum[rightIndex] && (spectrum[rightIndex].frequency < spectrum[indexOfMax].frequency + l));
+	} while (rightIndex && (rightIndex < indexOfMax + l));
 
 
 	// calculate squere
 	const squeres = [];
 	for(let index = 0; index < toCalculation.length - 1; index ++) {
-		const a = toCalculation[index].amplitude;
-		const b = toCalculation[index + 1].frequency - toCalculation[index].frequency;
+		const a = index;
+		const b = toCalculation[index + 1] - toCalculation[index];
 		squeres.push(a * b);
 	}
 
-	return sum(squeres);
+	return Math.abs(sum(squeres));
 };
 
 module.exports = { getSpectrumEnergy };

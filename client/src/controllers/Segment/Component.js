@@ -10,7 +10,7 @@ const Segment = ({ segment, meanEnergy }) =>
     </div>
     <div className="col-md-6 col-lg-6">
       <div id="spectrum-chat" className="chat-container" />
-      <span>Mean Energy: {meanEnergy}</span>  <span>energy: {segment.energy}</span>
+      <span>Mean Energy: {meanEnergy}</span>  <span>Energy: {segment.energy}</span>
     </div>
    </div>);
 

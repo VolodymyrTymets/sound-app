@@ -1,16 +1,14 @@
-const { maxBy, findIndex, values } = require('lodash');
-const fjs = require('frequencyjs');
-const { config } = require('../../config');
+const { max, indexOf, values } = require('lodash');
+const fftLib = require('fourier-transform');
+const { config } = require('../config');
 
 function nearestPow2( aSize ){
 	return Math.pow( 2, Math.round( Math.log( aSize ) / Math.log( 2 ) ) );
 }
 
 const spliceSpectrum = (spectrum) => {
-	const maxSpectrum = maxBy(spectrum, s => s.amplitude);
-	const maxIndex = findIndex(spectrum,
-		s => s.amplitude === maxSpectrum.amplitude);
-
+	const maxSpectrum = max(spectrum);
+	const maxIndex = indexOf(spectrum, maxSpectrum);
 	const from = maxIndex - (config.N / 2) || 0;
 	const to = maxIndex + (config.N / 2);
 
@@ -29,7 +27,7 @@ const fft = (wave) => {
 	}
 
 	const cutedWave = wave.slice(0, index);
-	const spectrum = fjs.Transform.toSpectrum(cutedWave, { method: 'fft'} );
+	const spectrum = fftLib(cutedWave);
 	return { wave: values(cutedWave), spectrum };
 };
 

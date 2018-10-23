@@ -29,27 +29,6 @@ class Storage {
 		}
 		return minuteFolder;
 	}
-
-	_getFileNameByTime(startRecordDate) {
-		const duration = moment.duration(moment().diff(startRecordDate));
-		return`${duration.hours()}:${duration.minutes()}:${duration.seconds()}:`;
-	}
-	getSegmentsFolder(startRecordDate) {
-	  const fileName = this._getFileNameByTime(startRecordDate);
-		const segmentsFolderPath = path.resolve(this.getFolderName(startRecordDate), './segments');
-		if (!fs.existsSync(segmentsFolderPath)){
-			fs.mkdirSync(segmentsFolderPath);
-		}
-		return path.resolve(segmentsFolderPath, `${fileName}.wav`);
-	}
-	getTissueFolder(startRecordDate, typeOfTissue) {
-		const fileName = this._getFileNameByTime(startRecordDate);
-		const segmentsFolderPath = path.resolve(this.getFolderName(startRecordDate), `./${typeOfTissue}`);
-		if (!fs.existsSync(segmentsFolderPath)){
-			fs.mkdirSync(segmentsFolderPath);
-		}
-		return path.resolve(segmentsFolderPath, `${fileName}.wav`);
-	}
 }
 
 module.exports = { Storage };

@@ -4,6 +4,7 @@
   "description": "socet-sound-app",
   "main": "index.js",
   "dependencies": {
+    "json2csv": "^4.2.1",
     "jsonfile": "^4.0.0"
   },
   "devDependencies": {
@@ -16,8 +17,8 @@
     "npm-run": "^4.1.2"
   },
   "scripts": {
-    "dev": "./node_modules/.bin/gulp run:dev",
-    "dev-raspi": "MIC=1 ./node_modules/.bin/gulp run:dev",
+    "dev": "TARGET=web ./node_modules/.bin/gulp run:dev",
+    "dev-raspi": "TARGET=raspi  MIC=1 ./node_modules/.bin/gulp run:dev",
     "client-dev": "./node_modules/.bin/gulp client",
     "start": "NODE_ENV=production NODE_PATH=server node ./server/bin/www",
     "lint": "eslint ./server"
