@@ -22,9 +22,11 @@ const Segments = ({ onChange, onTestSoundClick, settings }) => (
 				value={settings.mic}
 				onChange={onChange('mic')}
 			>
+
 				<MenuItem value="plughw:0" primaryText="plughw:0" />
 				<MenuItem value="plughw:1" primaryText="plughw:1" />
-        <MenuItem value="plughw:2" primaryText="plughw:2" />
+        <MenuItem value="hw:0" primaryText="hw:0" />
+        <MenuItem value="hw:1" primaryText="hw:1" />
 			</SelectField>
 		</div>
 		<div className="col-md-3 col-lg-3">
