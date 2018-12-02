@@ -1,0 +1,17 @@
+.sound-visualizer svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+
+}
+.sound-visualizer path {
+    stroke-linecap: square;
+    stroke: white;
+    stroke-width: 0.5px;
+}
+.sound-visualizer {
+    height: 400px;
+}
+

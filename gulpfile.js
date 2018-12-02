@@ -24,4 +24,4 @@ gulp.task('client',(done) =>
     () => done()));
 
 
-gulp.task('run:dev', gulp.parallel('client', 'server'));
+gulp.task('run:dev', ['client', 'server']);
