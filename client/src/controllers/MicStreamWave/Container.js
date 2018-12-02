@@ -13,6 +13,7 @@ const audioContent = new AudioContext();
 const configWave = {
   pointsToRender: 256,
   noiseLevelAdjustment: 1000,
+  noiseLevel: 3,
 };
 
 const enhance = compose(

@@ -29,7 +29,7 @@ const getVisualiser = (config ) => {
 
       // draw wave
       avarage = avarage / step;
-      const value = (avarage  * config.noiseLevelAdjustment);
+      const value = (avarage  * config.noiseLevelAdjustment) * config.noiseLevel;
       const adjustedLength = Math.floor(value) - (Math.floor(value) % 5);
 
       const x = i; // -> duration left
